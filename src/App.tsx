@@ -5,6 +5,8 @@ function App() {
   return (
     <div>
       <Login />
+      <br />
+      <br />
       <ApplicationForm />
     </div>
   );

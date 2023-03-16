@@ -1,22 +1,20 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { newApplicationValidations } from "../../../util/newApplicationValidations";
-interface FormValues {
-  employee: string;
-  medicalUnit: string;
-  doctor: string;
-  sickLeaveStartDate: string;
-  sickLeaveEndDate: string;
-  daysOfCoverage: number;
-  medicalDiagnostic: string;
-}
-
+import { FormValues } from "../../../interfaces/newApplicationFormInterfaces";
+//
+import { differenceInDays, addDays, format } from "date-fns";
+import Button from "@mui/material/Button";
+import { TextField, FormHelperText } from "@mui/material";
 const ApplicationForm: React.FC = () => {
   const {
     control,
     handleSubmit,
     trigger,
     formState: { errors },
+    setValue,
+    watch,
+    getValues,
   } = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: {
@@ -30,15 +28,27 @@ const ApplicationForm: React.FC = () => {
     },
   });
 
-  const handleValidInputChange = () => {
-    trigger(["sickLeaveEndDate", "sickLeaveStartDate"]);
-    console.log(errors);
-    if (
-      Object.keys(errors).length !== 0 &&
-      Object.keys(errors.sickLeaveEndDate as object).length !== 0 &&
-      Object.keys(errors.sickLeaveStartDate as object).length !== 0
-    ) {
-      console.log("todo bn");
+  const setDaysOfCoverage = (startDate: string, endDate: string) => {
+    return differenceInDays(new Date(startDate), new Date(endDate));
+  };
+  const handleChangeDaysOfCoverage = (startDate: string, days: number) => {
+    return format(addDays(new Date(startDate), days), "yyyy-MM-dd");
+    //setValue("sickLeaveEndDate", endDate);
+  };
+
+  const handleValidInputChange = async () => {
+    const result = await trigger(["sickLeaveEndDate", "sickLeaveStartDate"]);
+
+    if (result) {
+      const endDateWatch = watch("sickLeaveEndDate");
+      const startDateWatch = watch("sickLeaveStartDate");
+
+      setValue(
+        "daysOfCoverage",
+        setDaysOfCoverage(endDateWatch, startDateWatch)
+      );
+    } else {
+      setValue("daysOfCoverage", 0);
     }
   };
 
@@ -88,9 +98,21 @@ const ApplicationForm: React.FC = () => {
               message: "Doctor must be less than 50 characters",
             },
           }}
-          render={({ field }) => <input {...field} type="text" />}
+          render={({ field }) => (
+            <>
+              <TextField
+                {...field}
+                id="doctor"
+                label="Doctor"
+                variant="outlined"
+                fullWidth
+              />
+              {errors.doctor && (
+                <FormHelperText error>{errors.doctor.message}</FormHelperText>
+              )}
+            </>
+          )}
         />
-        {errors.doctor && <span>{errors.doctor.message}</span>}
       </div>
       <div>
         <label htmlFor="sickLeaveStartDate">Sick Leave Start Date:</label>
@@ -131,6 +153,7 @@ const ApplicationForm: React.FC = () => {
               onChange={(e) => {
                 field.onChange(e);
                 handleValidInputChange();
+                handleChangeDaysOfCoverage;
               }}
             />
           )}
@@ -166,18 +189,34 @@ const ApplicationForm: React.FC = () => {
             required: "Days of Coverage is required",
             min: { value: 1, message: "Days of Coverage must be at least 1" },
           }}
-          render={({ field }) => <input {...field} type="number" />}
+          render={({ field }) => (
+            <input
+              {...field}
+              type="number"
+              onChange={(e) => {
+                field.onChange(e);
+
+                const otherInputValue = getValues("sickLeaveStartDate");
+
+                if (otherInputValue) {
+                  const newEndDate = handleChangeDaysOfCoverage(
+                    otherInputValue,
+                    Number(e.target.value) || 0
+                  );
+                  setValue("sickLeaveEndDate", newEndDate);
+                  trigger(["sickLeaveEndDate", "sickLeaveStartDate"]);
+                }
+              }}
+            />
+          )}
         />
         {errors.daysOfCoverage && <span>{errors.daysOfCoverage.message}</span>}
       </div>
-      <button type="submit">Submit</button>
+      <Button variant="contained" type="submit">
+        Submit
+      </Button>
     </form>
   );
 };
 
 export default ApplicationForm;
-
-/**
- *
- *
- */
