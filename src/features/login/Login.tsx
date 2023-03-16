@@ -8,8 +8,6 @@ const handleLoginSubmit = (username: string, password: string) => {
 const Login: React.FC = () => {
   return (
     <div>
-       <MDBBtn>Button</MDBBtn>
-      <h1>Log in</h1>
       <LoginForm onSubmit={handleLoginSubmit} />
     </div>
   );
