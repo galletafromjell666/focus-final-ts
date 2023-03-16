@@ -4,8 +4,6 @@ import { newApplicationValidations } from "../../../util/newApplicationValidatio
 import { FormValues } from "../../../interfaces/newApplicationFormInterfaces";
 //
 import { differenceInDays, addDays, format } from "date-fns";
-import Button from "@mui/material/Button";
-import { TextField, FormHelperText } from "@mui/material";
 const ApplicationForm: React.FC = () => {
   const {
     control,
@@ -37,16 +35,18 @@ const ApplicationForm: React.FC = () => {
   };
 
   const handleValidInputChange = async () => {
+
     const result = await trigger(["sickLeaveEndDate", "sickLeaveStartDate"]);
 
     if (result) {
       const endDateWatch = watch("sickLeaveEndDate");
       const startDateWatch = watch("sickLeaveStartDate");
-
+      
       setValue(
         "daysOfCoverage",
         setDaysOfCoverage(endDateWatch, startDateWatch)
       );
+   
     } else {
       setValue("daysOfCoverage", 0);
     }
@@ -98,21 +98,9 @@ const ApplicationForm: React.FC = () => {
               message: "Doctor must be less than 50 characters",
             },
           }}
-          render={({ field }) => (
-            <>
-              <TextField
-                {...field}
-                id="doctor"
-                label="Doctor"
-                variant="outlined"
-                fullWidth
-              />
-              {errors.doctor && (
-                <FormHelperText error>{errors.doctor.message}</FormHelperText>
-              )}
-            </>
-          )}
+          render={({ field }) => <input {...field} type="text" />}
         />
+        {errors.doctor && <span>{errors.doctor.message}</span>}
       </div>
       <div>
         <label htmlFor="sickLeaveStartDate">Sick Leave Start Date:</label>
@@ -194,10 +182,11 @@ const ApplicationForm: React.FC = () => {
               {...field}
               type="number"
               onChange={(e) => {
+              
                 field.onChange(e);
 
                 const otherInputValue = getValues("sickLeaveStartDate");
-
+               
                 if (otherInputValue) {
                   const newEndDate = handleChangeDaysOfCoverage(
                     otherInputValue,
@@ -212,9 +201,7 @@ const ApplicationForm: React.FC = () => {
         />
         {errors.daysOfCoverage && <span>{errors.daysOfCoverage.message}</span>}
       </div>
-      <Button variant="contained" type="submit">
-        Submit
-      </Button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
