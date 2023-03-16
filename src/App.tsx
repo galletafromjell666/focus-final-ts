@@ -1,10 +1,13 @@
-
-import Login from "./Pages/Login/Login"
+import Login from "./features/login/Login";
+import ApplicationForm from "./features/newApplication/components/ApplicacionForm";
 
 function App() {
   return (
-  <Login/>
-    )
+    <div>
+      <Login />
+      <ApplicationForm />
+    </div>
+  );
 }
 
-export default App
+export default App;

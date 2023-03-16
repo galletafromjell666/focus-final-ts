@@ -1,8 +1,7 @@
 import React from "react";
-import LoginForm from "./Components/LoginForm";
+import LoginForm from "./components/LoginForm";
 
 const handleLoginSubmit = (username: string, password: string) => {
-  // Perform login logic here, e.g. send a POST request to a login API endpoint
   console.log(`Logging in with username '${username}' and password '${password}'...`);
 };
 
