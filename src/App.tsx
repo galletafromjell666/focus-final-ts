@@ -1,6 +1,6 @@
 
 import Login from "./features/login/Login";
-import ApplicationForm from "./features/newApplication/components/ApplicacionForm";
+import ApplicationForm from "./features/newAppModal/components/ApplicacionForm";
 
 function App() {
   return (

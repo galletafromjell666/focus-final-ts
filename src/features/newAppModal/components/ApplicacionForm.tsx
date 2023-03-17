@@ -1,5 +1,5 @@
 import { useForm, Controller } from 'react-hook-form';
-import { newApplicationValidations } from '../../../util/newApplicationValidations';
+import { newApplicationValidations } from '../../../util/rhfValidations';
 import { MDBRow, MDBCol, MDBInput, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
 import { FormValues } from '../../../interfaces/newApplicationFormInterfaces';
 import { addDaysToDate, getDeltaFromDates } from '../../../util/handleDateChange';
