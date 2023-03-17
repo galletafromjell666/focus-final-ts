@@ -126,7 +126,6 @@ const ApplicationForm: React.FC = () => {
                                     onChange={(e) => {
                                         field.onChange(e);
                                         handleValidInputChange();
-                                        addDaysToDate;
                                     }}
                                 />
                             )}

@@ -25,8 +25,9 @@ async function firebaseHandleLogin(app: FirebaseApp, username: string, password:
     if (!doPasswordMatch) {
         return { error: 'Invalid username or password' };
     }
-    console.log('saving... ', user);
+
     useUserStore.setState({ user });
+    return { sucess: 'Auth sucess' };
 }
 
 export { firebaseHandleLogin };
