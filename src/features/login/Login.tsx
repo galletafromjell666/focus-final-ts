@@ -1,15 +1,18 @@
-import React from "react";
-import LoginForm from "./components/LoginForm";
-const handleLoginSubmit = (username: string, password: string) => {
-  console.log(`Logging in with username '${username}' and password '${password}'...`);
-};
+import React from 'react';
+import LoginForm from './components/LoginForm';
+import { app } from '../../firebase';
+import { firebaseHandleLogin } from './loginFunction';
 
 const Login: React.FC = () => {
-  return (
-    <div>
-      <LoginForm onSubmit={handleLoginSubmit} />
-    </div>
-  );
+    const handleLoginSubmit = async (username: string, password: string) => {
+        const resp = await firebaseHandleLogin(app, username, password);
+        console.log(resp);
+    };
+    return (
+        <div>
+            <LoginForm onSubmit={handleLoginSubmit} />
+        </div>
+    );
 };
 
 export default Login;

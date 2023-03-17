@@ -9,6 +9,21 @@ const endDateGreaterThanStartDate = (endDate: Date, startDate: Date) => {
 };
 
 const newApplicationValidations = {
+  employee: {
+    required: "Employee is required",
+    maxLength: {
+      value: 25,
+      message: "Employee's Name must be less than 25 characters",
+    },
+  },
+  medicalUnit: { required: "Medical Unit is required" },
+  doctor: {
+    required: "Doctor is required",
+    maxLength: {
+      value: 50,
+      message: "Doctor must be less than 50 characters",
+    },
+  },
   sickLeaveStartDate: {
     required: "Sick Leave Start Date is required",
     validate: {
@@ -34,6 +49,20 @@ const newApplicationValidations = {
           new Date(startDate)
         );
       },
+    },
+  },
+  daysOfCoverage: {
+    required: "Days of Coverage is required",
+    min: {
+      value: 1,
+      message: "Days of Coverage must be at least 1",
+    },
+  },
+  medicalDiagnostic: {
+    required: "Medical Diagnostic is required",
+    maxLength: {
+      value: 300,
+      message: "Medical Diagnostic must be less than 300 characters",
     },
   },
 };
