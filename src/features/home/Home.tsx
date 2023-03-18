@@ -1,7 +1,13 @@
+import FilterForm from './Components/FilterForm';
+import Header from './Components/Header';
+import TableUsers from './Components/Table';
+
 const Home = () => {
     return (
         <div>
-            <h1>This is the home component, the table will live here!</h1>
+            <Header />
+            <FilterForm />
+            {/* <TableUsers /> */}
         </div>
     );
 };
