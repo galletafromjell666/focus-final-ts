@@ -1,18 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { app } from '../firebase';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-
-interface Employee {
-    id: string;
-    name: string;
-    age: number;
-}
-
-interface Application {
-    id: string;
-    name: string;
-    position: string;
-}
+import { Application } from '../interfaces/Application';
+import { Employee } from '../interfaces/Employee';
 
 async function fetchCollection<T>(collectionName: string, mapper: (doc: any) => T): Promise<T[]> {
     const db = getFirestore(app);

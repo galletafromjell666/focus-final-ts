@@ -1,10 +1,14 @@
 import { useForm, Controller } from 'react-hook-form';
-import { newApplicationValidations } from '../../util/rhfValidations';
+import { newApplicationValidations } from '../../../util/rhfValidations';
 import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
-import { Application } from '../../interfaces/newApplicationFormInterfaces';
-import { addDaysToDate, getDeltaFromDates } from '../../util/handleDateChange';
-import { submitAppToFirebase } from './submitToFirebase';
-import ErrorMessage from './components/ErrorMessage';
+//import { FormApp } from '../../../interfaces/FormApp';
+import { FormApp } from '../../../interfaces/FormApplication';
+import { addDaysToDate, getDeltaFromDates } from '../../../util/handleDateChange';
+import { submitAppToFirebase } from '../submitToFirebase';
+import ErrorMessage from './ErrorMessage';
+import { useFetchEmployees } from '../../../hooks/useFetchCollection';
+import { Employee } from '../../../interfaces/Employee';
+import { Application } from '../../../interfaces/Application';
 
 const ApplicationForm: React.FC = () => {
     const {
@@ -15,10 +19,9 @@ const ApplicationForm: React.FC = () => {
         setValue,
         watch,
         getValues
-    } = useForm<Application>({
+    } = useForm<FormApp>({
         mode: 'onBlur',
         defaultValues: {
-            employee: '',
             medicalUnit: '',
             doctor: '',
             sickLeaveStartDate: '',
@@ -27,6 +30,8 @@ const ApplicationForm: React.FC = () => {
             daysOfCoverage: 0
         }
     });
+
+    const { data: employeeData } = useFetchEmployees();
 
     const handleValidInputChange = async () => {
         //validates if both date fields triggering their validations
@@ -40,8 +45,14 @@ const ApplicationForm: React.FC = () => {
         }
     };
 
-    const onSubmit = (data: Application) => {
-        submitAppToFirebase(data);
+    const onSubmit = (data: FormApp) => {
+        const employee = employeeData?.find((u) => u.id === data.employeeForm);
+        const application: Application = {
+            ...data,
+            employee
+        };
+
+        submitAppToFirebase(application);
         console.log(data);
     };
 
@@ -53,8 +64,22 @@ const ApplicationForm: React.FC = () => {
                         <MDBTypography htmlFor="doctor" variant="h5">
                             Employee
                         </MDBTypography>
-                        <Controller name="employee" control={control} rules={newApplicationValidations.employee} render={({ field }) => <input className=" w-75 p-2" {...field} type="text" />} />
-                        <ErrorMessage error={errors.employee} />
+                        <Controller
+                            name="employeeForm"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <select {...field}>
+                                    <option value="">Select an option</option>
+                                    {employeeData?.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.fullName}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        />
+                        <ErrorMessage error={errors.employeeForm} />
                     </MDBCol>
                     <MDBCol>
                         <MDBTypography htmlFor="doctor" variant="h5">

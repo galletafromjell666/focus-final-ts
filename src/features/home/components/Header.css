@@ -1,0 +1,23 @@
+.btn-container {
+    margin: 0.7rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 1rem;
+    transition: all 0.5s;
+    background-color: #007aff;
+    margin-left: auto;
+}
+
+@media (max-width: 576px) {
+    .btn-container {
+        margin: 0.7rem 0;
+        display: flex;
+        justify-content: center;
+    }
+    .filter-btn {
+        margin-left: unset;
+    }
+}

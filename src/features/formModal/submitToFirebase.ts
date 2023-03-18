@@ -1,6 +1,6 @@
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app } from '../../firebase';
-import { Application } from '../../interfaces/newApplicationFormInterfaces';
+import { Application } from '../../interfaces/Application';
 
 async function submitAppToFirebase(data: Application) {
     try {

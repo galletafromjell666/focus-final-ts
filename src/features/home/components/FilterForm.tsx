@@ -4,10 +4,10 @@ import './FilterForm.css';
 export default function FilterForm() {
     return (
         <MDBContainer fluid>
-            <MDBRow center className="my-4">
+            <MDBRow center className="my-4 mx-2">
                 <MDBCol lg="6" md="8" sm="10" xs="12" className="py-2">
                     <div className="input-container">
-                        <MDBInput size="lg" type="text" wrapperClass="form-outline mx-4" label="Search" />
+                        <MDBInput size="lg" type="text" wrapperClass="form-outline" label="Search" />
                     </div>
                 </MDBCol>
                 <MDBCol lg="2" md="4" sm="5" xs="12" className="py-2">
