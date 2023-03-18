@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginForm from './components/LoginForm';
 import { app } from '../../firebase';
-import { firebaseHandleLogin } from './loginFunction';
+import { firebaseHandleLogin } from './handleLoginFirebase';
 
 const Login: React.FC = () => {
     const handleLoginSubmit = async (username: string, password: string) => {

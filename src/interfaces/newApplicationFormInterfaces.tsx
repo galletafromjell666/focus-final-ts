@@ -1,4 +1,4 @@
-export interface FormValues {
+export interface Application {
   employee: string;
   medicalUnit: string;
   doctor: string;

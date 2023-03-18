@@ -1,8 +1,9 @@
 import { useForm, Controller } from 'react-hook-form';
-import { newApplicationValidations } from '../../../util/rhfValidations';
-import { MDBRow, MDBCol, MDBInput, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
-import { FormValues } from '../../../interfaces/newApplicationFormInterfaces';
-import { addDaysToDate, getDeltaFromDates } from '../../../util/handleDateChange';
+import { newApplicationValidations } from '../../util/rhfValidations';
+import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
+import { Application } from '../../interfaces/newApplicationFormInterfaces';
+import { addDaysToDate, getDeltaFromDates } from '../../util/handleDateChange';
+import { submitAppToFirebase } from './submitToFirebase';
 import ErrorMessage from './components/ErrorMessage';
 
 const ApplicationForm: React.FC = () => {
@@ -14,7 +15,7 @@ const ApplicationForm: React.FC = () => {
         setValue,
         watch,
         getValues
-    } = useForm<FormValues>({
+    } = useForm<Application>({
         mode: 'onBlur',
         defaultValues: {
             employee: '',
@@ -33,14 +34,14 @@ const ApplicationForm: React.FC = () => {
         if (areDatesValid) {
             const endDateWatch = watch('sickLeaveEndDate');
             const startDateWatch = watch('sickLeaveStartDate');
-
             setValue('daysOfCoverage', getDeltaFromDates(endDateWatch, startDateWatch));
         } else {
             setValue('daysOfCoverage', 0);
         }
     };
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: Application) => {
+        submitAppToFirebase(data);
         console.log(data);
     };
 

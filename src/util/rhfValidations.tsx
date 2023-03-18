@@ -57,6 +57,10 @@ const newApplicationValidations = {
       value: 1,
       message: "Days of Coverage must be at least 1",
     },
+    max: {
+      value: 1000,
+      message: "Days of Coverage must be lower than 1000",
+    },
   },
   medicalDiagnostic: {
     required: "Medical Diagnostic is required",
