@@ -15,7 +15,7 @@ const FormModal: React.FC<FormModalProps> = ({ basicModal, setBasicModal }) => {
                         <MDBBtn className="btn-close" color="none" onClick={toggleShow}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <ApplicationForm />
+                        <ApplicationForm show={basicModal} setShow={setBasicModal} />
                     </MDBModalBody>
                 </MDBModalContent>
             </MDBModalDialog>

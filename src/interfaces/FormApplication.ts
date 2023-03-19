@@ -1,5 +1,5 @@
 export interface FormApp {
-    employeeForm: string;
+    employeeId: string;
     medicalUnit: string;
     doctor: string;
     sickLeaveStartDate: string;

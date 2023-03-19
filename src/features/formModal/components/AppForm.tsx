@@ -1,16 +1,22 @@
 import { useForm, Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { newApplicationValidations } from '../../../util/rhfValidations';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
 import { FormApp } from '../../../interfaces/FormApplication';
 import { getDeltaFromDates } from '../../../util/handleDateChange';
-import { submitAppToFirebase } from '../submitToFirebase';
 import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
 import { Application } from '../../../interfaces/Application';
 import { format } from 'date-fns';
 import { useAddApplication } from '../../../hooks/useAddApplication';
 
-const ApplicationForm: React.FC = () => {
+interface AppForm {
+    show: boolean;
+    setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
     const {
         control,
         handleSubmit,
@@ -23,14 +29,40 @@ const ApplicationForm: React.FC = () => {
         defaultValues: {
             medicalUnit: '',
             doctor: '',
-            sickLeaveStartDate: '',
+            medicalDiagnostic: '',
             sickLeaveEndDate: '',
-            medicalDiagnostic: ''
+            sickLeaveStartDate: '',
+            daysOfCoverage: 0
         }
     });
-
     const { data: employeeData } = useFetchEmployees();
-    const { mutate } = useAddApplication();
+    const { mutate: addAplication } = useAddApplication();
+
+    const onSubmit = (data: FormApp) => {
+        const currentDate = format(new Date(), 'yyyy-MM-dd');
+        const newAppToSubmit: Application = {
+            ...data,
+            employee: employeeData?.find((u) => u.id === data.employeeId),
+            applicationDate: currentDate
+        };
+        addAplication(newAppToSubmit, {
+            onSuccess: () => {
+                setShow(false);
+                toast.success('Application sent successfully', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light'
+                });
+            }
+        });
+        console.log(data);
+    };
+
     const handleValidInputChange = async () => {
         //validates if both date fields triggering their validations
         const areDatesValid = await trigger(['sickLeaveEndDate', 'sickLeaveStartDate']);
@@ -43,18 +75,6 @@ const ApplicationForm: React.FC = () => {
         }
     };
 
-    const onSubmit = (data: FormApp) => {
-        const currentDate = format(new Date(), 'yyyy-MM-dd');
-        const application: Application = {
-            ...data,
-            employee: employeeData?.find((u) => u.id === data.employeeForm),
-            applicationDate: currentDate
-        };
-        //submitAppToFirebase(application);
-        mutate(application);
-        console.log(data);
-    };
-
     return (
         <MDBContainer fluid>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +84,7 @@ const ApplicationForm: React.FC = () => {
                             Employee
                         </MDBTypography>
                         <Controller
-                            name="employeeForm"
+                            name="employeeId"
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => (
@@ -78,7 +98,7 @@ const ApplicationForm: React.FC = () => {
                                 </select>
                             )}
                         />
-                        <ErrorMessage error={errors.employeeForm} />
+                        <ErrorMessage error={errors.employeeId} />
                     </MDBCol>
                     <MDBCol>
                         <MDBTypography htmlFor="doctor" variant="h5">

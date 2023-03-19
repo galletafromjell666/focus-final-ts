@@ -6,7 +6,7 @@ function useDeleteApplicationByID() {
     const queryClient = useQueryClient();
     return useMutation<void, Error, string>((id) => deleteApplicationFromFirebase(id), {
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['employee'] });
+            queryClient.invalidateQueries({ queryKey: ['application'] });
         },
         onError: () => {
             throw new Error('Failed to delete application.');
