@@ -1,7 +1,6 @@
 import { Employee } from './Employee';
 
 export interface Application {
-    id?: string;
     employee?: Employee;
     medicalUnit: string;
     sickLeaveStartDate: string;
@@ -9,4 +8,9 @@ export interface Application {
     doctor: string;
     daysOfCoverage: number;
     medicalDiagnostic: string;
+    applicationDate: string;
+}
+
+export interface ApplicationFirestore extends Application {
+    id: string;
 }

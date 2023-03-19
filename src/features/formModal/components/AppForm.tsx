@@ -1,14 +1,14 @@
 import { useForm, Controller } from 'react-hook-form';
 import { newApplicationValidations } from '../../../util/rhfValidations';
 import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
-//import { FormApp } from '../../../interfaces/FormApp';
 import { FormApp } from '../../../interfaces/FormApplication';
-import { addDaysToDate, getDeltaFromDates } from '../../../util/handleDateChange';
+import { getDeltaFromDates } from '../../../util/handleDateChange';
 import { submitAppToFirebase } from '../submitToFirebase';
 import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
-import { Employee } from '../../../interfaces/Employee';
 import { Application } from '../../../interfaces/Application';
+import { format } from 'date-fns';
+import { useAddApplication } from '../../../hooks/useAddApplication';
 
 const ApplicationForm: React.FC = () => {
     const {
@@ -17,8 +17,7 @@ const ApplicationForm: React.FC = () => {
         trigger,
         formState: { errors },
         setValue,
-        watch,
-        getValues
+        watch
     } = useForm<FormApp>({
         mode: 'onBlur',
         defaultValues: {
@@ -26,13 +25,12 @@ const ApplicationForm: React.FC = () => {
             doctor: '',
             sickLeaveStartDate: '',
             sickLeaveEndDate: '',
-            medicalDiagnostic: '',
-            daysOfCoverage: 0
+            medicalDiagnostic: ''
         }
     });
 
     const { data: employeeData } = useFetchEmployees();
-
+    const { mutate } = useAddApplication();
     const handleValidInputChange = async () => {
         //validates if both date fields triggering their validations
         const areDatesValid = await trigger(['sickLeaveEndDate', 'sickLeaveStartDate']);
@@ -46,13 +44,14 @@ const ApplicationForm: React.FC = () => {
     };
 
     const onSubmit = (data: FormApp) => {
-        const employee = employeeData?.find((u) => u.id === data.employeeForm);
+        const currentDate = format(new Date(), 'yyyy-MM-dd');
         const application: Application = {
             ...data,
-            employee
+            employee: employeeData?.find((u) => u.id === data.employeeForm),
+            applicationDate: currentDate
         };
-
-        submitAppToFirebase(application);
+        //submitAppToFirebase(application);
+        mutate(application);
         console.log(data);
     };
 
@@ -160,26 +159,7 @@ const ApplicationForm: React.FC = () => {
                     </MDBCol>
                     <MDBCol>
                         <label htmlFor="daysOfCoverage">Days of Coverage:</label>
-                        <Controller
-                            name="daysOfCoverage"
-                            control={control}
-                            rules={newApplicationValidations.daysOfCoverage}
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    type="number"
-                                    onChange={(e) => {
-                                        field.onChange(e);
-                                        const otherInputValue = getValues('sickLeaveStartDate');
-                                        if (otherInputValue) {
-                                            const newEndDate = addDaysToDate(otherInputValue, Number(e.target.value) || 0);
-                                            setValue('sickLeaveEndDate', newEndDate);
-                                            trigger(['sickLeaveEndDate', 'sickLeaveStartDate']);
-                                        }
-                                    }}
-                                />
-                            )}
-                        />
+                        <Controller name="daysOfCoverage" control={control} rules={newApplicationValidations.daysOfCoverage} render={({ field }) => <input disabled {...field} type="number" />} />
                         <ErrorMessage error={errors.daysOfCoverage} />
                     </MDBCol>
                 </MDBRow>

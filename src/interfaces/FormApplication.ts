@@ -4,7 +4,7 @@ export interface FormApp {
     doctor: string;
     sickLeaveStartDate: string;
     sickLeaveEndDate: string;
-    daysOfCoverage: number;
+    daysOfCoverage: number ;
     medicalDiagnostic: string;
   }
   

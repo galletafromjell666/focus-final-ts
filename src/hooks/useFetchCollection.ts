@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { app } from '../firebase';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { Application } from '../interfaces/Application';
+import { ApplicationFirestore } from '../interfaces/Application';
 import { Employee } from '../interfaces/Employee';
 
 async function fetchCollection<T>(collectionName: string, mapper: (doc: any) => T): Promise<T[]> {
@@ -19,7 +19,7 @@ function useFetchEmployees() {
 }
 
 function useFetchApplications() {
-    return useQuery<Application[], Error>(['application'], () => fetchCollection('application', (data) => data as Application));
+    return useQuery<ApplicationFirestore[], Error>(['application'], () => fetchCollection('application', (data) => data as ApplicationFirestore));
 }
 
 export { useFetchEmployees, useFetchApplications };
