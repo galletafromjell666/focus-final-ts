@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import FormModal from '../../../newAppModal/newAppModal';
 import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
+import FormModal from '../../../newAppModal/newAppModal';
 import './Header.css';
 
-const Header = () => {
+const Header: React.FC = () => {
     const [basicModal, setBasicModal] = useState(false);
     const btnModalHandler = (setModalFn: React.Dispatch<React.SetStateAction<boolean>>) => {
         setModalFn(true);

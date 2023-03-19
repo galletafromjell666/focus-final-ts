@@ -9,6 +9,7 @@ import { useFetchEmployees } from '../../../hooks/useFetchCollection';
 import { Application, FormApp } from '../../../interfaces/';
 import { format } from 'date-fns';
 import { useAddApplication } from '../../../hooks/useAddApplication';
+import toastStyles from '../../../util/toastifyStyles';
 
 interface AppForm {
     show: boolean;
@@ -47,16 +48,7 @@ const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
         addAplication(newAppToSubmit, {
             onSuccess: () => {
                 setShow(false);
-                toast.success('Application sent successfully', {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light'
-                });
+                toast.success('Application sent successfully', toastStyles.sucess);
             }
         });
         console.log(data);
