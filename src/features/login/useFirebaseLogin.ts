@@ -10,17 +10,18 @@ async function firebaseHandleLogin(username: string, password: string) {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-        throw new Error('Invalid username or password');
+        return { status: 'error', message: 'Invalid username' };
     }
 
     const userDoc = querySnapshot.docs[0];
     const user = userDoc.data() as User;
 
     if (!bcrypt.compareSync(password, user.password || '')) {
-        throw new Error('Invalid username or password');
+        return { status: 'error', message: 'Invalid password' };
     }
     const { password: psw, ...userWithoutPassword } = user;
     useUserStore.setState({ user: userWithoutPassword });
+    return { status: 'sucess', message: 'OK' };
 }
 
 export { firebaseHandleLogin };
