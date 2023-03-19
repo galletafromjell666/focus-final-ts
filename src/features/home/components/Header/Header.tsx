@@ -1,11 +1,12 @@
+import { useState } from 'react';
+import FormModal from '../../../newAppModal/newAppModal';
 import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
 import './Header.css';
-import FormModal from '../../formModal/formModal';
-import { useState } from 'react';
+
 const Header = () => {
     const [basicModal, setBasicModal] = useState(false);
-    const btnModalHandler = (setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
-        setFn(true);
+    const btnModalHandler = (setModalFn: React.Dispatch<React.SetStateAction<boolean>>) => {
+        setModalFn(true);
     };
     return (
         <>

@@ -1,5 +1,5 @@
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody } from 'mdb-react-ui-kit';
-import ApplicationForm from '../formModal/components/AppForm';
+import ApplicationForm from './components/AppForm';
 interface FormModalProps {
     basicModal: boolean;
     setBasicModal: React.Dispatch<React.SetStateAction<boolean>>;

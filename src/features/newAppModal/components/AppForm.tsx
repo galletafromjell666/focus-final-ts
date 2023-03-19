@@ -3,11 +3,10 @@ import { toast } from 'react-toastify';
 import { newApplicationValidations } from '../../../util/rhfValidations';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
-import { FormApp } from '../../../interfaces/FormApplication';
 import { getDeltaFromDates } from '../../../util/handleDateChange';
 import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
-import { Application } from '../../../interfaces/Application';
+import { Application, FormApp } from '../../../interfaces/';
 import { format } from 'date-fns';
 import { useAddApplication } from '../../../hooks/useAddApplication';
 

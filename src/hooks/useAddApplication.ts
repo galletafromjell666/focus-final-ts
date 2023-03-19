@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app } from '../firebase';
-import { Application } from '../interfaces/Application';
+import { Application } from '../interfaces';
 
 function useAddApplication() {
     const queryClient = useQueryClient();

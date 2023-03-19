@@ -1,12 +1,6 @@
 import { create, StateCreator } from 'zustand';
 import { persist, devtools, createJSONStorage } from 'zustand/middleware';
-
-interface User {
-    //refractor this, i have the same interface on loginFunction... and also need all the fields.
-    docId: string;
-    username: string;
-    password?: string;
-}
+import { User } from '../interfaces';
 
 export interface UserStore {
     user: User | null;
@@ -17,7 +11,6 @@ export interface UserStore {
 const userState: StateCreator<UserStore> = (set) => ({
     user: null,
     setUser: (user: User | null) => {
-        delete user?.password;
         console.log(user);
         set({ user });
     },

@@ -1,6 +1,7 @@
 import { MDBContainer, MDBIcon } from 'mdb-react-ui-kit';
-import { useDeleteApplicationByID } from '../../../hooks/useDeleteApplication';
-import { ApplicationFirestore } from '../../../interfaces/Application';
+import { toast } from 'react-toastify';
+import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
+import { ApplicationFirestore } from '../../../../interfaces';
 import './Table.css';
 
 interface TableProps {
@@ -8,11 +9,22 @@ interface TableProps {
 }
 
 export default function TableUsers({ data: items }: TableProps) {
-    //create the one who deletes from firebase later...
     const { mutate } = useDeleteApplicationByID();
     const handleDelete = (index: string) => {
-        console.log('DELETEEE');
-        mutate(index);//GET MEESAGE OF LOADING, BC IT TAKES A WHILE TO DELETE 
+        mutate(index, {
+            onSuccess: () => {
+                toast.info('Deleted sucesfully', {
+                    position: 'top-right',
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored'
+                });
+            }
+        });
     };
 
     return (

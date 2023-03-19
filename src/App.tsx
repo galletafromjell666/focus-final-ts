@@ -1,12 +1,7 @@
-import Login from './features/login/Login';
-import Home from './features/home/Home';
-import TableUsers from './features/home/components/Table';
-import { useFetchApplications } from './hooks/useFetchCollection';
+import Login from './features/login/login';
+import Home from './features/home/home';
+
 function App() {
-    const { data, isLoading } = useFetchApplications();
-    if (data) {
-        console.log(data);
-    }
     return (
         <div>
             <Login />
@@ -15,7 +10,6 @@ function App() {
             <Home />
             <br />
             <br />
-            {data?.length && <TableUsers data={data ?? []} />}
         </div>
     );
 }
