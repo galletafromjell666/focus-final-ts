@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { app } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { Application } from '../interfaces';
 
 function useAddApplication() {
@@ -16,7 +16,6 @@ function useAddApplication() {
 }
 
 async function addApplicationToFirestore(data: Application) {
-    const db = getFirestore(app);
     const applicationsRef = collection(db, 'application');
     const docRef = await addDoc(applicationsRef, data);
     return docRef.id;

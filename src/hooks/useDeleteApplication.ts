@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { app } from '../firebase';
-import { getFirestore, collection, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { collection, deleteDoc, doc } from 'firebase/firestore';
 
 function useDeleteApplicationByID() {
     const queryClient = useQueryClient();
@@ -14,7 +14,6 @@ function useDeleteApplicationByID() {
     });
 }
 async function deleteApplicationFromFirebase(id: string) {
-    const db = getFirestore(app);
     const applicationRef = doc(collection(db, 'application'), id);
     await deleteDoc(applicationRef);
 }

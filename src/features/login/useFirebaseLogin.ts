@@ -1,11 +1,10 @@
 import bcrypt from 'bcryptjs-react';
 import useUserStore from '../../hooks/useUserStore';
-import { app } from '../../firebase';
-import { getFirestore, collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { User } from '../../interfaces';
 
 async function firebaseHandleLogin(username: string, password: string) {
-    const db = getFirestore(app);
     const usersRef = collection(db, 'users');
     const q = query(usersRef, where('username', '==', username), limit(1));
     const querySnapshot = await getDocs(q);
