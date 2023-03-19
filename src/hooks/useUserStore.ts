@@ -1,5 +1,5 @@
 import { create, StateCreator } from 'zustand';
-import { persist, devtools, createJSONStorage } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { User } from '../interfaces';
 
 export interface UserStore {
@@ -17,11 +17,6 @@ const userState: StateCreator<UserStore> = (set) => ({
     removeUser: () => set({ user: null })
 });
 
-const useUserStore = create<UserStore>()(
-    persist(devtools(userState), {
-        name: 'user-store',
-        storage: createJSONStorage(() => sessionStorage)
-    })
-);
+const useUserStore = create<UserStore>()(devtools(userState));
 
 export default useUserStore;
