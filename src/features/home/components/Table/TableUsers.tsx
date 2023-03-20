@@ -50,7 +50,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data: items, isHrEsp: showExtraC
                                 <td>{item.sickLeaveEndDate}</td>
                                 <td>
                                     <button onClick={() => handleDelete(item.id)}>
-                                        <MDBIcon s icon="trash" />
+                                        <MDBIcon icon="trash" />
                                     </button>
                                 </td>
                             </tr>
