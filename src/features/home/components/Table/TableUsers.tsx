@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { MDBContainer, MDBIcon } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
 import { ApplicationFirestore } from '../../../../interfaces';
 import toastStyles from '../../../../util/toastifyStyles';
 import './Table.css';
+import { useTable, Column } from 'react-table';
 
 interface TableUserProps {
     isHrEsp: boolean;
@@ -12,49 +14,67 @@ interface TableUserProps {
 
 const TableUsers: React.FC<TableUserProps> = ({ data: items, isHrEsp: showExtraCols }) => {
     const { mutate } = useDeleteApplicationByID();
+
     const handleDelete = (index: string) => {
         mutate(index, {
             onSuccess: () => {
-                toast.info('Deleted sucesfully', toastStyles.delete);
+                toast.info('Deleted successfully', toastStyles.delete);
             }
         });
     };
 
+    const columns: Column<ApplicationFirestore>[] = useMemo(() => {
+        const commonColumns = [
+            { Header: 'Medical diagnostic', accessor: (row: ApplicationFirestore) => row.medicalDiagnostic },
+            {
+                Header: 'Application date',
+                accessor: (row: ApplicationFirestore) => row.applicationDate
+            },
+            { Header: 'Medical Unit', accessor: (row: ApplicationFirestore) => row.medicalUnit },
+            { Header: 'Doctor', accessor: (row: ApplicationFirestore) => row.doctor },
+            { Header: 'Days of coverage', accessor: (row: ApplicationFirestore) => row.daysOfCoverage },
+            { Header: 'Start date', accessor: (row: ApplicationFirestore) => row.sickLeaveStartDate }
+        ];
+        //  return commonColumns;
+        return showExtraCols ? [{ Header: 'Employee', accessor: (row: ApplicationFirestore) => row.employee?.fullName ?? 'N/A' }, ...commonColumns] : commonColumns;
+    }, [showExtraCols]);
+
+    const data = useMemo(() => {
+        console.log('items:', items);
+        return items;
+    }, [items]);
+
+    const tableInstance = useTable<ApplicationFirestore>({
+        columns,
+        data
+    });
+
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
+
     return (
         <MDBContainer fluid className="px-4">
             {items.length > 0 ? (
-                <table>
+                <table {...getTableProps()}>
                     <thead>
-                        <tr>
-                            {showExtraCols && <th>Employee</th>}
-                            <th>Medical diagnostic</th>
-                            <th>Application date</th>
-                            <th>Medical Unit</th>
-                            <th>Doctor</th>
-                            <th>Days of coverage</th>
-                            <th>Start date</th>
-                            <th>End date</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((item, index) => (
-                            <tr key={index}>
-                                {showExtraCols && <td>{item.employee?.fullName}</td>}
-                                <td>{item.medicalDiagnostic}</td>
-                                <td>{item.applicationDate}</td>
-                                <td>{item.medicalUnit}</td>
-                                <td>{item.doctor}</td>
-                                <td>{item.daysOfCoverage}</td>
-                                <td>{item.sickLeaveStartDate}</td>
-                                <td>{item.sickLeaveEndDate}</td>
-                                <td>
-                                    <button onClick={() => handleDelete(item.id)}>
-                                        <MDBIcon icon="trash" />
-                                    </button>
-                                </td>
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                ))}
                             </tr>
                         ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {rows.map((row) => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             ) : (

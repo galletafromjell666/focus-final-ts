@@ -1,6 +1,6 @@
 import { ToastContainer } from 'react-toastify';
 import { useFetchApplications } from '../../hooks/useFetchCollection';
-import { FilterForm, Header, TablePagination, TableUsers } from './components/index';
+import { FilterForm, Header, TableUsers } from './components/index';
 import 'react-toastify/dist/ReactToastify.css';
 import useUserStore from '../../hooks/useUserStore';
 import { useState, useEffect } from 'react';
@@ -24,7 +24,6 @@ const Home: React.FC = () => {
             <ToastContainer />
             {/**FIX THIS, AND SHOW A MESSAGE WHEN EMPTY */}
             {filteredData?.length && <TableUsers isHrEsp={isHrEspecialist} data={filteredData} />}
-            <TablePagination data={filteredData} setFilteredData={setFilteredData} />
         </div>
     );
 };
