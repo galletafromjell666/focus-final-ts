@@ -1,13 +1,34 @@
-import React, { useMemo } from 'react';
-import { Column, Table as ReactTable, PaginationState, useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, OnChangeFn, flexRender } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
+import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, FilterFn, flexRender } from '@tanstack/react-table';
 import { ApplicationFirestore } from '../../../../interfaces';
+
+import { rankItem } from '@tanstack/match-sorter-utils';
+
 interface TableUserProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
 }
-const TableUsersV2: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols }) => {
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    // Rank the item
+    const itemRank = rankItem(row.getValue(columnId), value);
+
+    // Store the itemRank info
+    addMeta({
+        itemRank
+    });
+
+    // Return if the item should be filtered in/out
+    return itemRank.passed;
+};
+
+const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols }) => {
     console.log(data.length);
-    const columns = React.useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
+    // filter stuff const rerender = React.useReducer(() => ({}), {})[1]
+    //const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [globalFilter, setGlobalFilter] = useState('');
+    //
+    const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
         const commonCols = [
             {
                 header: () => 'Medical diagnostic',
@@ -41,12 +62,14 @@ const TableUsersV2: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols }
             },
             {
                 header: () => 'Start date',
+                enableGlobalFilter: false,
                 accessorKey: 'sickLeaveStartDate',
                 cell: (info: { getValue: () => any }) => info.getValue(),
                 footer: (props: { column: { id: any } }) => props.column.id
             },
             {
                 header: () => 'End date',
+                enableGlobalFilter: false,
                 accessorKey: 'sickLeaveEndDate',
                 cell: (info: { getValue: () => any }) => info.getValue(),
                 footer: (props: { column: { id: any } }) => props.column.id
@@ -70,14 +93,22 @@ const TableUsersV2: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols }
         data,
         columns,
         // Pipeline
+        onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        globalFilterFn: fuzzyFilter,
         //
-        debugTable: true
+        debugTable: true,
+        state: {
+            globalFilter
+        }
     });
     return (
         <div>
+            <div>
+                <input value={globalFilter ?? ''} onChange={(e) => setGlobalFilter(String(e.target.value))} className="p-2 font-lg shadow border border-block" placeholder="Search all columns..." />
+            </div>
             <table>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -155,4 +186,4 @@ const TableUsersV2: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols }
     );
 };
 
-export default TableUsersV2;
+export default TableUsers;
