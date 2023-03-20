@@ -1,60 +1,62 @@
-import { useForm, Controller } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { newApplicationValidations } from '../../../util/rhfValidations';
-import 'react-toastify/dist/ReactToastify.min.css';
-import { MDBRow, MDBCol, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
-import { getDeltaFromDates } from '../../../util/handleDateChange';
+import { useEffect } from 'react';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { MDBCol, MDBContainer, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
 import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
-import { Application, FormApp } from '../../../interfaces/';
-import { format } from 'date-fns';
-import { useAddApplication } from '../../../hooks/useAddApplication';
-import toastStyles from '../../../util/toastifyStyles';
+import useUserStore from '../../../hooks/useUserStore';
+import { newApplicationValidations } from '../../../util/rhfValidations';
+import { getDeltaFromDates } from '../../../util/handleDateChange';
+import { FormApp } from '../../../interfaces';
+import 'react-toastify/dist/ReactToastify.min.css';
+import useHandleModalSubmit from '../../../hooks/useModalSubmission';
 
 interface AppForm {
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
+const defaultValues: FieldValues = {
+    mode: 'onBlur',
+    defaultValues: {
+        employeeId: '',
+        medicalUnit: '',
+        doctor: '',
+        medicalDiagnostic: '',
+        sickLeaveEndDate: '',
+        sickLeaveStartDate: '',
+        daysOfCoverage: 0
+    }
+};
+
+const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
     const {
         control,
         handleSubmit,
         trigger,
         formState: { errors },
         setValue,
-        watch
-    } = useForm<FormApp>({
-        mode: 'onBlur',
-        defaultValues: {
-            medicalUnit: '',
-            doctor: '',
-            medicalDiagnostic: '',
-            sickLeaveEndDate: '',
-            sickLeaveStartDate: '',
-            daysOfCoverage: 0
-        }
-    });
+        watch,
+        reset,
+        formState
+    } = useForm<FormApp>(defaultValues);
+
     const { data: employeeData } = useFetchEmployees();
-    const { mutate: addAplication } = useAddApplication();
+    const { user } = useUserStore();
+    const isHrEspecialist = user?.role === 'hr_specialist';
+    const { handleModalSubmit } = useHandleModalSubmit();
 
-    const onSubmit = (data: FormApp) => {
-        const currentDate = format(new Date(), 'yyyy-MM-dd');
-        const newAppToSubmit: Application = {
-            ...data,
-            employee: employeeData?.find((u) => u.id === data.employeeId),
-            applicationDate: currentDate
-        };
-        addAplication(newAppToSubmit, {
-            onSuccess: () => {
-                setShow(false);
-                toast.success('Application sent successfully', toastStyles.sucess);
-            }
-        });
-        console.log(data);
+    const onSubmit = (formData: FormApp) => {
+        console.log(formData);
+        handleModalSubmit({ formData, isHrEspecialist, employeeData, user });
     };
+    useEffect(() => {
+        if (formState.isSubmitSuccessful) {
+            setShow(false);
+            reset(defaultValues);
+        }
+    }, [formState, reset, setShow]);
 
-    const handleValidInputChange = async () => {
+    const handleDateChange = async () => {
         //validates if both date fields triggering their validations
         const areDatesValid = await trigger(['sickLeaveEndDate', 'sickLeaveStartDate']);
         if (areDatesValid) {
@@ -70,27 +72,29 @@ const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
         <MDBContainer fluid>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <MDBRow className="mb-4">
-                    <MDBCol>
-                        <MDBTypography htmlFor="doctor" variant="h5">
-                            Employee
-                        </MDBTypography>
-                        <Controller
-                            name="employeeId"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <select {...field}>
-                                    <option value="">Select an option</option>
-                                    {employeeData?.map((item) => (
-                                        <option key={item.id} value={item.id}>
-                                            {item.fullName}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
-                        />
-                        <ErrorMessage error={errors.employeeId} />
-                    </MDBCol>
+                    {isHrEspecialist ? (
+                        <MDBCol>
+                            <MDBTypography htmlFor="doctor" variant="h5">
+                                Employee
+                            </MDBTypography>
+                            <Controller
+                                name="employeeId"
+                                control={control}
+                                rules={{ required: isHrEspecialist }}
+                                render={({ field }) => (
+                                    <select {...field}>
+                                        <option value="">Select an option</option>
+                                        {employeeData?.map((item) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.fullName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+                            <ErrorMessage error={errors.employeeId} />
+                        </MDBCol>
+                    ) : null}
                     <MDBCol>
                         <MDBTypography htmlFor="doctor" variant="h5">
                             Medical Unit
@@ -138,7 +142,7 @@ const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
                                     value={field.value ?? ''}
                                     onChange={(e) => {
                                         field.onChange(e);
-                                        handleValidInputChange();
+                                        handleDateChange();
                                     }}
                                 />
                             )}
@@ -161,7 +165,7 @@ const ApplicationForm: React.FC<AppForm> = ({ show, setShow }) => {
                                     value={field.value ?? ''}
                                     onChange={(e) => {
                                         field.onChange(e);
-                                        handleValidInputChange();
+                                        handleDateChange();
                                     }}
                                 />
                             )}

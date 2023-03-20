@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
-import FormModal from '../../../newAppModal/newAppModal';
+import FormModal from '../../../FormModal/FormModal';
 import './Header.css';
 
 const Header: React.FC = () => {

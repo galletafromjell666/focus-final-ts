@@ -6,10 +6,11 @@ import toastStyles from '../../../../util/toastifyStyles';
 import './Table.css';
 
 interface TableUserProps {
+    isHrEsp: boolean;
     data: ApplicationFirestore[];
 }
 
-const TableUsers: React.FC<TableUserProps> = ({ data: items }) => {
+const TableUsers: React.FC<TableUserProps> = ({ data: items, isHrEsp: showExtraCols }) => {
     const { mutate } = useDeleteApplicationByID();
     const handleDelete = (index: string) => {
         mutate(index, {
@@ -25,6 +26,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data: items }) => {
                 <table>
                     <thead>
                         <tr>
+                            {showExtraCols && <th>Employee</th>}
                             <th>Medical diagnostic</th>
                             <th>Application date</th>
                             <th>Medical Unit</th>
@@ -38,6 +40,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data: items }) => {
                     <tbody>
                         {items.map((item, index) => (
                             <tr key={index}>
+                                {showExtraCols && <td>{item.employee?.fullName}</td>}
                                 <td>{item.medicalDiagnostic}</td>
                                 <td>{item.applicationDate}</td>
                                 <td>{item.medicalUnit}</td>
@@ -47,7 +50,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data: items }) => {
                                 <td>{item.sickLeaveEndDate}</td>
                                 <td>
                                     <button onClick={() => handleDelete(item.id)}>
-                                        <MDBIcon icon="trash" />
+                                        <MDBIcon s icon="trash" />
                                     </button>
                                 </td>
                             </tr>

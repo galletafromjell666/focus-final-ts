@@ -1,7 +1,7 @@
 import { ToastOptions } from 'react-toastify/dist/types';
 interface ToastifyStyles {
     delete: ToastOptions;
-    sucess: ToastOptions;
+    success: ToastOptions;
 }
 const toastStyles: ToastifyStyles = {
     delete: {
@@ -14,7 +14,7 @@ const toastStyles: ToastifyStyles = {
         progress: undefined,
         theme: 'colored'
     },
-    sucess: {
+    success: {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,

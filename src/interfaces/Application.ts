@@ -6,6 +6,7 @@ export interface Application {
     sickLeaveStartDate: string;
     sickLeaveEndDate: string;
     doctor: string;
+    employeeId: string;
     daysOfCoverage: number;
     medicalDiagnostic: string;
     applicationDate: string;
