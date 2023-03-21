@@ -11,7 +11,6 @@ export interface UserStore {
 const userState: StateCreator<UserStore> = (set) => ({
     user: null,
     setUser: (user: User | null) => {
-        console.log(user);
         set({ user });
     },
     removeUser: () => set({ user: null })

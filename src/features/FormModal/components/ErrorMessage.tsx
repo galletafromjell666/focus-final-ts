@@ -6,7 +6,6 @@ interface Props {
 }
 
 function ErrorMessage({ error }: Props): JSX.Element | null {
-    console.log(error);
     return error ? (
         <MDBTypography variant="h6" className="form-text mt-2 text-danger">
             {error.message}

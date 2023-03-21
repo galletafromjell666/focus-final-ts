@@ -20,15 +20,14 @@ const Home: React.FC = () => {
         removeUser();
         navigate('/login');
     };
-    console.log(user);
     const isHrEspecialist = user?.role === 'hr_specialist';
     return (
         <div>
             <Header user={user} logOutHandler={logOutHandler} />
             <FilterForm handleSearchChange={setSearchString} />
-            <ToastContainer />
             {/**FIX THIS, AND SHOW A MESSAGE WHEN EMPTY */}
             {filteredData?.length && <TableUsers isHrEsp={isHrEspecialist} searchString={searchString} data={filteredData} />}
+            <ToastContainer />
         </div>
     );
 };

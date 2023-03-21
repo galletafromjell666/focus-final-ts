@@ -2,9 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, FilterFn, flexRender } from '@tanstack/react-table';
 import { ApplicationFirestore } from '../../../../interfaces';
 import { rankItem } from '@tanstack/match-sorter-utils';
-import { commonCols as defaultCols } from '../../../../util/reactTableConfig';
+import { commonCols as defaultCols } from '../../../../util/tableConfig';
 import './Table.css';
 import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
+import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
+import { toast } from 'react-toastify';
+import toastStyles from '../../../../util/toastifyStyles';
 interface TableUserProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
@@ -20,9 +23,24 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 };
 
 const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols, searchString }) => {
+    const { mutate: deleteApp } = useDeleteApplicationByID();
     const [globalFilter, setGlobalFilter] = useState('');
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
+        function handleAction(rowData: ApplicationFirestore) {
+            deleteApp(rowData.id, {
+                onSuccess: () => {
+                    toast.info('Deleted successfully', toastStyles.delete);
+                }
+            });
+        }
+
         const commonCols = defaultCols;
+        const actionCol = {
+            header: '',
+            accessorKey: 'action',
+            cell: (info: { row: { original: ApplicationFirestore } }) => <button onClick={() => handleAction(info.row.original)}>Action</button>,
+            footer: (props: { column: { id: any } }) => props.column.id
+        };
         return showExtraCols
             ? [
                   {
@@ -31,10 +49,11 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols, se
                       cell: (info: { getValue: () => any }) => info.getValue(),
                       footer: (props: { column: { id: any } }) => props.column.id
                   },
-                  ...commonCols
+                  ...commonCols,
+                  actionCol
               ]
-            : commonCols;
-    }, [showExtraCols]);
+            : [...commonCols, actionCol];
+    }, [deleteApp, showExtraCols]);
 
     const table = useReactTable({
         data,

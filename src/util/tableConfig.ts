@@ -42,7 +42,8 @@ const commonCols = [
         accessorKey: 'sickLeaveEndDate',
         cell: (info: { getValue: () => any }) => info.getValue(),
         footer: (props: { column: { id: any } }) => props.column.id
-    }
+    },
+    
 ];
 
 export {commonCols}
