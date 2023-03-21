@@ -7,7 +7,7 @@ const Login: React.FC = () => {
 
     const handleLoginSubmit = async (username: string, password: string) => {
         const { status } = await firebaseHandleLogin(username, password);
-        if (status === 'sucess') {
+        if (status === 'success') {
             navigate('/');
         }
     };

@@ -26,3 +26,17 @@ th {
 tbody td {
     font-size: 1rem;
 }
+
+
+
+.pagination-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 1rem;
+}
+
+.button-container{
+    display: flex;
+    justify-content: space-around;
+    gap: 0.3rem;
+}

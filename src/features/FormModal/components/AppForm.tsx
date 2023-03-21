@@ -80,9 +80,9 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                             <Controller
                                 name="employeeId"
                                 control={control}
-                                rules={{ required: isHrEspecialist }}
+                                rules={isHrEspecialist ? { required: 'Employee is required' } : {}}
                                 render={({ field }) => (
-                                    <select {...field}>
+                                    <select className="w-75 p-2" {...field}>
                                         <option value="">Select an option</option>
                                         {employeeData?.map((item) => (
                                             <option key={item.id} value={item.id}>
@@ -152,13 +152,14 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                 </MDBRow>
                 <MDBRow className="mb-4">
                     <MDBCol>
-                        <label htmlFor="sickLeaveEndDate">Sick Leave End Date:</label>
+                        <MDBTypography variant="h5">Sick leave End date:</MDBTypography>
                         <Controller
                             name="sickLeaveEndDate"
                             control={control}
                             rules={newApplicationValidations.sickLeaveEndDate}
                             render={({ field }) => (
                                 <input
+                                    className="w-75 p-2"
                                     id="sickLeaveEndDate"
                                     type="date"
                                     {...field}
@@ -173,18 +174,30 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                         <ErrorMessage error={errors.sickLeaveEndDate} />
                     </MDBCol>
                     <MDBCol>
-                        <label htmlFor="daysOfCoverage">Days of Coverage:</label>
-                        <Controller name="daysOfCoverage" control={control} rules={newApplicationValidations.daysOfCoverage} render={({ field }) => <input disabled {...field} type="number" />} />
+                        <MDBTypography variant="h5">Sick leave End date:</MDBTypography>
+                        <Controller
+                            name="daysOfCoverage"
+                            control={control}
+                            rules={newApplicationValidations.daysOfCoverage}
+                            render={({ field }) => <input className="w-75 p-2" disabled {...field} type="number" />}
+                        />
                         <ErrorMessage error={errors.daysOfCoverage} />
                     </MDBCol>
                 </MDBRow>
                 <MDBRow>
                     <MDBCol>
-                        <label htmlFor="medicalDiagnostic">Medical Diagnostic:</label>
-                        <Controller name="medicalDiagnostic" control={control} rules={newApplicationValidations.medicalDiagnostic} render={({ field }) => <input {...field} type="text" />} />
+                        <MDBTypography variant="h5">Medical Diagnostic:</MDBTypography>
+                        <Controller
+                            name="medicalDiagnostic"
+                            control={control}
+                            rules={newApplicationValidations.medicalDiagnostic}
+                            render={({ field }) => <input className="w-100 p-2 my-" {...field} type="text" />}
+                        />
                         <ErrorMessage error={errors.medicalDiagnostic} />
-                        <button type="submit">Submit</button>
                     </MDBCol>
+                </MDBRow>
+                <MDBRow>
+                    <button type="submit">Submit</button>
                 </MDBRow>
             </form>
         </MDBContainer>

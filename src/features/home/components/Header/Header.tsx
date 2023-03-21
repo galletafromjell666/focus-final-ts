@@ -2,8 +2,14 @@ import { useState } from 'react';
 import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
 import FormModal from '../../../FormModal/FormModal';
 import './Header.css';
+import { User } from '../../../../interfaces';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+    logOutHandler: () => void;
+    user: User | null;
+}
+
+const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
     const [basicModal, setBasicModal] = useState(false);
     const btnModalHandler = (setModalFn: React.Dispatch<React.SetStateAction<boolean>>) => {
         setModalFn(true);
@@ -14,11 +20,14 @@ const Header: React.FC = () => {
                 <MDBRow center className="my-4 mx-2">
                     <MDBCol className="d-flex">
                         <MDBIcon fas icon="user-tie" size="4x" />
-                        <div className="ps-3 d-flex flex-column justify-content-center align-items-center">
+                        <div className="ps-4 d-flex flex-column justify-content-center">
                             <MDBTypography variant="h5" className="fw-bold">
-                                John Doe
+                                {user?.employee.fullName}
                             </MDBTypography>
-                            <div>Log out btn</div>
+                            <div onClick={logOutHandler} className="text-danger pe-auto custom-pointer">
+                                <MDBIcon icon="fas fa-sign-out-alt" className="pe-2" />
+                                Log out btn
+                            </div>
                         </div>
                     </MDBCol>
                     <MDBCol size="sm-3" className="btn-container">

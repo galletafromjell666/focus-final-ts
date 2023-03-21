@@ -11,6 +11,10 @@
     margin-left: auto;
 }
 
+.custom-pointer{
+  cursor: pointer;
+}
+
 @media (max-width: 576px) {
     .btn-container {
         margin: 0.7rem 0;
