@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
                             </MDBTypography>
                             <div onClick={logOutHandler} className="text-danger pe-auto custom-pointer">
                                 <MDBIcon icon="fas fa-sign-out-alt" className="pe-2" />
-                                Log out btn
+                                Log Out 
                             </div>
                         </div>
                     </MDBCol>

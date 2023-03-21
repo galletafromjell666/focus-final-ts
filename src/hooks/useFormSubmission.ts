@@ -13,7 +13,6 @@ interface UseHandleModalSubmitParams {
 
 function useHandleModalSubmit() {
     const { mutate: addApplication } = useAddApplication();
-
     const handleModalSubmit = async ({ formData, isHrEspecialist, employeeData, user }: UseHandleModalSubmitParams) => {
         const currentDate = format(new Date(), 'yyyy-MM-dd');
         const employeeObj = employeeData?.find((u) => u.id === (isHrEspecialist ? formData.employeeId : user?.employeeId));
@@ -25,7 +24,6 @@ function useHandleModalSubmit() {
         };
         try {
             await addApplication(newAppToSubmit);
-
             toast.success('Application sent successfully', toastStyles.success);
         } catch (error) {
             throw new Error('Unable to sent Application to firebase');

@@ -8,7 +8,7 @@ import { newApplicationValidations } from '../../../util/rhfValidations';
 import { getDeltaFromDates } from '../../../util/handleDateChange';
 import { FormApp } from '../../../interfaces';
 import 'react-toastify/dist/ReactToastify.min.css';
-import useHandleModalSubmit from '../../../hooks/useModalSubmission';
+import useHandleModalSubmit from '../../../hooks/useFormSubmission';
 
 interface AppForm {
     show: boolean;

@@ -1,17 +1,17 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+const { VITE_API_KEY, VITE_AUTH_DOMAIN, VITE_PROJECT_ID, VITE_STORAGE_BUCKET, VITE_MESSAGE_SENDER_ID, VITE_APP_ID, VITE_MEASUREMENT_ID } = import.meta.env;
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyB65RB8nQM75Q5El4voaVIxWtwS2tUhRAo',
-    authDomain: 'focus-final-b46fc.firebaseapp.com',
-    projectId: 'focus-final-b46fc',
-    storageBucket: 'focus-final-b46fc.appspot.com',
-    messagingSenderId: '194368297965',
-    appId: '1:194368297965:web:baff447252b6ea921e25e4',
-    measurementId: 'G-R7ZT7WT3H1'
+    apiKey: VITE_API_KEY,
+    authDomain: VITE_AUTH_DOMAIN,
+    projectId: VITE_PROJECT_ID,
+    storageBucket: VITE_STORAGE_BUCKET,
+    messagingSenderId: VITE_MESSAGE_SENDER_ID,
+    appId: VITE_APP_ID,
+    measurementId: VITE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export { db, app };
-

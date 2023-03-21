@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, FilterFn, flexRender } from '@tanstack/react-table';
-import { ApplicationFirestore } from '../../../../interfaces';
+import { commonCols as defaultCols, actionCol, employeeCol } from '../../../../util/tableConfig';
 import { rankItem } from '@tanstack/match-sorter-utils';
-import { commonCols as defaultCols } from '../../../../util/tableConfig';
-import './Table.css';
-import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
+import { useEffect, useMemo, useState } from 'react';
+import { ApplicationFirestore } from '../../../../interfaces';
+import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import toastStyles from '../../../../util/toastifyStyles';
+import './Table.css';
 interface TableUserProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
@@ -22,11 +22,15 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     return itemRank.passed;
 };
 
-const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols, searchString }) => {
+const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, searchString }) => {
     const { mutate: deleteApp } = useDeleteApplicationByID();
     const [globalFilter, setGlobalFilter] = useState('');
+    useEffect(() => {
+        setGlobalFilter(searchString);
+    }, [searchString]);
+
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
-        function handleAction(rowData: ApplicationFirestore) {
+        function handleDeleteApp(rowData: ApplicationFirestore) {
             deleteApp(rowData.id, {
                 onSuccess: () => {
                     toast.info('Deleted successfully', toastStyles.delete);
@@ -34,26 +38,10 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols, se
             });
         }
 
+        const deleteCol = actionCol(handleDeleteApp);
         const commonCols = defaultCols;
-        const actionCol = {
-            header: '',
-            accessorKey: 'action',
-            cell: (info: { row: { original: ApplicationFirestore } }) => <button onClick={() => handleAction(info.row.original)}>Action</button>,
-            footer: (props: { column: { id: any } }) => props.column.id
-        };
-        return showExtraCols
-            ? [
-                  {
-                      header: () => 'Employee',
-                      accessorKey: 'employee.fullName',
-                      cell: (info: { getValue: () => any }) => info.getValue(),
-                      footer: (props: { column: { id: any } }) => props.column.id
-                  },
-                  ...commonCols,
-                  actionCol
-              ]
-            : [...commonCols, actionCol];
-    }, [deleteApp, showExtraCols]);
+        return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
+    }, [deleteApp, showExtraCol]);
 
     const table = useReactTable({
         data,
@@ -69,9 +57,6 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCols, se
             globalFilter
         }
     });
-    useEffect(() => {
-        setGlobalFilter(searchString);
-    }, [searchString]);
 
     const paginationButtons = [];
     for (let i = 0; i < table.getPageCount(); i++) {
