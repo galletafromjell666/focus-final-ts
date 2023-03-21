@@ -1,5 +1,18 @@
 import { FieldValues } from 'react-hook-form';
 
+const defaultValues: FieldValues = {
+    mode: 'onBlur',
+    defaultValues: {
+        employeeId: '',
+        medicalUnit: '',
+        doctor: '',
+        medicalDiagnostic: '',
+        sickLeaveEndDate: '',
+        sickLeaveStartDate: '',
+        daysOfCoverage: 0
+    }
+};
+
 const startDateLessThanEndDate = (startDate: Date, endDate: Date) => {
     return startDate < endDate || 'Start date must be before end date';
 };
@@ -62,4 +75,4 @@ const newApplicationValidations = {
     }
 };
 
-export { newApplicationValidations };
+export { newApplicationValidations, defaultValues };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useFetchApplications } from '../../hooks/useFetchCollection';
@@ -6,6 +6,7 @@ import useUserStore from '../../hooks/useUserStore';
 import { FilterForm, Header, Loader, TableUsers } from './components/index';
 import { ApplicationFirestore } from '../../interfaces';
 import 'react-toastify/dist/ReactToastify.css';
+
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const { data = [], isLoading } = useFetchApplications();
@@ -17,9 +18,14 @@ const Home: React.FC = () => {
         navigate('/login');
     };
     const isHrEspecialist = user?.role === 'hr_specialist';
+
+    const updateUsersTableData = useCallback((data: ApplicationFirestore[], isHrEspecialist: boolean, employeeId?: string) => {
+        setUsersTableData(isHrEspecialist ? data : data.filter((app) => app.employeeId === employeeId));
+    }, []);
+
     useEffect(() => {
-        setUsersTableData(isHrEspecialist ? data : data.filter((app) => app.employeeId === user?.employeeId));
-    }, [data, isHrEspecialist, user?.employeeId]);
+        updateUsersTableData(data, isHrEspecialist, user?.employeeId);
+    }, [data, isHrEspecialist, user?.employeeId, updateUsersTableData]);
 
     let content = null;
     if (isLoading) {

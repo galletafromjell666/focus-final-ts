@@ -1,0 +1,88 @@
+.form-class-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 1rem 1rem;
+    margin: 0 0 1rem 0;
+}
+
+.especialist {
+    grid-template-areas:
+        'employee end-date'
+        'medical-unit start-date'
+        'doctor coverage-days';
+}
+
+.employee {
+    grid-template-areas:
+        'medical-unit end-date'
+        'doctor coverage-days'
+        'start-date 0';
+}
+
+.end-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.end-container > input[type='text'] {
+    height: 5rem;
+}
+
+#employee {
+    grid-area: employee;
+}
+#medical-unit {
+    grid-area: medical-unit;
+}
+#doctor {
+    grid-area: doctor;
+}
+#start-date {
+    grid-area: start-date;
+}
+#end-date {
+    grid-area: end-date;
+}
+#coverage-days {
+    grid-area: coverage-days;
+}
+
+.form-class-container > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-class-container input,
+.form-class-container select,
+.end-container input {
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 0.3rem;
+}
+
+@media (max-width: 992px) {
+    .form-class-container {
+        grid-template-columns: 1fr;
+    }
+    .employee {
+        grid-template-areas:
+            'medical-unit'
+            'doctor'
+            'start-date'
+            'end-date'
+            'coverage-days';
+    }
+    .especialist {
+        grid-template-areas:
+            'employee'
+            'medical-unit'
+            'doctor'
+            'start-date'
+            'end-date'
+            'coverage-days';
+    }
+}

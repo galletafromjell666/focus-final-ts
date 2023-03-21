@@ -24,7 +24,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, sea
         function handleDeleteApp(rowData: ApplicationFirestore) {
             deleteApp(rowData.id, {
                 onSuccess: () => {
-                    toast.info('Deleted successfully', toastStyles.delete);
+                    toast.warning('Deleted successfully', toastStyles.delete);
                 }
             });
         }

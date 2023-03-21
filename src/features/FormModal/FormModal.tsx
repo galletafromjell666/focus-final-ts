@@ -1,5 +1,5 @@
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody } from 'mdb-react-ui-kit';
-import ApplicationForm from './components/AppForm';
+import AppForm from './components/AppForm';
 interface FormModalProps {
     basicModal: boolean;
     setBasicModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,7 +15,7 @@ const FormModal: React.FC<FormModalProps> = ({ basicModal, setBasicModal }) => {
                         <MDBBtn className="btn-close" color="none" onClick={toggleShow}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <ApplicationForm show={basicModal} setShow={setBasicModal} />
+                        <AppForm show={basicModal} setShow={setBasicModal} />
                     </MDBModalBody>
                 </MDBModalContent>
             </MDBModalDialog>

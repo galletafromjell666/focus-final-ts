@@ -1,34 +1,20 @@
 import { useEffect } from 'react';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
-import { MDBCol, MDBContainer, MDBRow, MDBTypography } from 'mdb-react-ui-kit';
+import { Controller, useForm } from 'react-hook-form';
+import { MDBBtn, MDBContainer, MDBTypography } from 'mdb-react-ui-kit';
 import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
 import useUserStore from '../../../hooks/useUserStore';
-import { newApplicationValidations } from '../../../util/rhfValidations';
+import { newApplicationValidations, defaultValues } from '../../../util/rhfValidations';
 import { getDeltaFromDates } from '../../../util/dateUtilities';
 import { FormApp } from '../../../interfaces';
-import 'react-toastify/dist/ReactToastify.min.css';
 import useHandleModalSubmit from '../../../hooks/useFormSubmission';
-
-interface AppForm {
+import './AppForm.css';
+interface AppFormProps {
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const defaultValues: FieldValues = {
-    mode: 'onBlur',
-    defaultValues: {
-        employeeId: '',
-        medicalUnit: '',
-        doctor: '',
-        medicalDiagnostic: '',
-        sickLeaveEndDate: '',
-        sickLeaveStartDate: '',
-        daysOfCoverage: 0
-    }
-};
-
-const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
+const AppForm: React.FC<AppFormProps> = ({ setShow }) => {
     const {
         control,
         handleSubmit,
@@ -69,11 +55,11 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
     };
 
     return (
-        <MDBContainer fluid>
+        <MDBContainer fluid >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <MDBRow className="mb-4">
+                <div className={`form-class-container ${isHrEspecialist ? 'especialist' : 'employee'}`}>
                     {isHrEspecialist ? (
-                        <MDBCol>
+                        <div id="employee">
                             <MDBTypography htmlFor="doctor" variant="h5">
                                 Employee
                             </MDBTypography>
@@ -93,42 +79,10 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                                 )}
                             />
                             <ErrorMessage error={errors.employeeId} />
-                        </MDBCol>
+                        </div>
                     ) : null}
-                    <MDBCol>
-                        <MDBTypography htmlFor="doctor" variant="h5">
-                            Medical Unit
-                        </MDBTypography>
-                        <Controller
-                            name="medicalUnit"
-                            control={control}
-                            rules={newApplicationValidations.medicalUnit}
-                            render={({ field }) => (
-                                <select className="w-75 p-2" {...field}>
-                                    <option value="">-- Select Medical Unit --</option>
-                                    <option value="ISSS">ISSS</option>
-                                    <option value="MINSAL">MINSAL</option>
-                                </select>
-                            )}
-                        />
-                        <ErrorMessage error={errors.medicalUnit} />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow className="mb-4">
-                    <MDBCol>
-                        <MDBTypography htmlFor="doctor" variant="h5">
-                            Doctor
-                        </MDBTypography>
-                        <Controller
-                            name="doctor"
-                            control={control}
-                            rules={newApplicationValidations.doctor}
-                            render={({ field }) => <input className="w-75 p-2" placeholder="Doctor's Name" {...field} type="text" />}
-                        />
-                        <ErrorMessage error={errors.doctor} />
-                    </MDBCol>
-                    <MDBCol>
-                        <MDBTypography variant="h5">Sick leave start date:</MDBTypography>
+                    <div id="start-date">
+                        <MDBTypography variant="h5">Sick leave Start date:</MDBTypography>
                         <Controller
                             name="sickLeaveStartDate"
                             control={control}
@@ -148,10 +102,26 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                             )}
                         />
                         <ErrorMessage error={errors.sickLeaveStartDate} />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow className="mb-4">
-                    <MDBCol>
+                    </div>
+                    <div id="medical-unit">
+                        <MDBTypography htmlFor="medicalUnit" variant="h5">
+                            Medical Unit
+                        </MDBTypography>
+                        <Controller
+                            name="medicalUnit"
+                            control={control}
+                            rules={newApplicationValidations.medicalUnit}
+                            render={({ field }) => (
+                                <select className="w-75 p-2" {...field}>
+                                    <option value="">-- Select Medical Unit --</option>
+                                    <option value="ISSS">ISSS</option>
+                                    <option value="MINSAL">MINSAL</option>
+                                </select>
+                            )}
+                        />
+                        <ErrorMessage error={errors.medicalUnit} />
+                    </div>
+                    <div id="end-date">
                         <MDBTypography variant="h5">Sick leave End date:</MDBTypography>
                         <Controller
                             name="sickLeaveEndDate"
@@ -172,9 +142,22 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                             )}
                         />
                         <ErrorMessage error={errors.sickLeaveEndDate} />
-                    </MDBCol>
-                    <MDBCol>
-                        <MDBTypography variant="h5">Sick leave End date:</MDBTypography>
+                    </div>
+                    <div id="doctor">
+                        <MDBTypography htmlFor="doctor" variant="h5">
+                            Doctor
+                        </MDBTypography>
+                        <Controller
+                            name="doctor"
+                            control={control}
+                            rules={newApplicationValidations.doctor}
+                            render={({ field }) => <input className="w-75 p-2" placeholder="Doctor's Name" {...field} type="text" />}
+                        />
+                        <ErrorMessage error={errors.doctor} />
+                    </div>
+
+                    <div id="coverage-days">
+                        <MDBTypography variant="h5">Coverage Days:</MDBTypography>
                         <Controller
                             name="daysOfCoverage"
                             control={control}
@@ -182,10 +165,10 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                             render={({ field }) => <input className="w-75 p-2" disabled {...field} type="number" />}
                         />
                         <ErrorMessage error={errors.daysOfCoverage} />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                    <MDBCol>
+                    </div>
+                </div>
+                <div>
+                    <div className="end-container w-75 mx-auto">
                         <MDBTypography variant="h5">Medical Diagnostic:</MDBTypography>
                         <Controller
                             name="medicalDiagnostic"
@@ -194,14 +177,14 @@ const ApplicationForm: React.FC<AppForm> = ({ setShow }) => {
                             render={({ field }) => <input className="w-100 p-2 my-" {...field} type="text" />}
                         />
                         <ErrorMessage error={errors.medicalDiagnostic} />
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                    <button type="submit">Submit</button>
-                </MDBRow>
+                    </div>
+                    <div className="d-grid mx-auto w-25 mt-4">
+                        <MDBBtn type="submit">Submit</MDBBtn>
+                    </div>
+                </div>
             </form>
         </MDBContainer>
     );
 };
 
-export default ApplicationForm;
+export default AppForm;
