@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
     return (
         <>
             <MDBContainer fluid>
-                <MDBRow center className="my-4 mx-2">
+                <MDBRow center className="header-row">
                     <MDBCol className="d-flex">
                         <MDBIcon fas icon="user-tie" size="4x" />
                         <div className="ps-4 d-flex flex-column justify-content-center">
@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
                             </MDBTypography>
                             <div onClick={logOutHandler} className="text-danger pe-auto custom-pointer">
                                 <MDBIcon icon="fas fa-sign-out-alt" className="pe-2" />
-                                Log Out 
+                                Log Out
                             </div>
                         </div>
                     </MDBCol>
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
                             onClick={() => {
                                 btnModalHandler(setBasicModal);
                             }}
-                            className="filter-btn"
+                            className="new-app-btn"
                         >
                             New Application
                         </MDBBtn>

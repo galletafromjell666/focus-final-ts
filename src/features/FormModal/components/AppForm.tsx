@@ -5,7 +5,7 @@ import ErrorMessage from './ErrorMessage';
 import { useFetchEmployees } from '../../../hooks/useFetchCollection';
 import useUserStore from '../../../hooks/useUserStore';
 import { newApplicationValidations } from '../../../util/rhfValidations';
-import { getDeltaFromDates } from '../../../util/handleDateChange';
+import { getDeltaFromDates } from '../../../util/dateUtilities';
 import { FormApp } from '../../../interfaces';
 import 'react-toastify/dist/ReactToastify.min.css';
 import useHandleModalSubmit from '../../../hooks/useFormSubmission';

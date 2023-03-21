@@ -1,3 +1,5 @@
+import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
+import { MDBIcon } from 'mdb-react-ui-kit';
 import { ApplicationFirestore } from '../interfaces';
 
 const commonCols = [
@@ -58,9 +60,21 @@ const actionCol = (callback: (arg0: ApplicationFirestore) => void) => {
     return {
         header: '',
         accessorKey: 'action',
-        cell: (info: { row: { original: ApplicationFirestore } }) => <button onClick={() => callback(info.row.original)}>Action</button>,
+        cell: (info: { row: { original: ApplicationFirestore } }) => (
+            <div>
+                <MDBIcon far icon="trash-alt" onClick={() => callback(info.row.original)} size="xl" style={{ cursor: 'pointer' }} className="text-danger" />
+            </div>
+        ),
         footer: (props: { column: { id: any } }) => props.column.id
     };
 };
 
-export { commonCols, employeeCol, actionCol };
+function globalSearch(row: any, columnId: string, value: any, addMeta: (arg0: { itemRank: RankingInfo }) => void): any {
+    const itemRank = rankItem(row.getValue(columnId), value);
+    addMeta({
+        itemRank
+    });
+    return itemRank.passed;
+}
+
+export { commonCols, employeeCol, actionCol, globalSearch };

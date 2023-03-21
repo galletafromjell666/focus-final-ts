@@ -20,23 +20,53 @@ td {
 }
 
 th {
-    font-weight:400;
+    font-weight: 400;
 }
 
 tbody td {
     font-size: 1rem;
 }
 
-
-
-.pagination-container{
+.pagination-container {
     display: flex;
     justify-content: space-between;
     margin: 2rem 1rem;
 }
 
-.button-container{
+.button-container {
     display: flex;
     justify-content: space-around;
     gap: 0.3rem;
+}
+
+.pagination-container > div > button,
+.pagination-container > div > select {
+    background-color: #f2f5f7;
+    border-radius: 8px;
+    border-width: 0;
+    color: #000000;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0;
+    padding: 10px 12px;
+    text-align: center;
+    transition: all 200ms;
+    vertical-align: baseline;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.pagination-container > div > select {
+    padding: 0.5rem 0.3rem;
+    margin: 0 0 0 0.5rem;
+    background: #fff;
+    border: 1.26331px solid #e9e9ea;
+}
+.pagination-container > div > button:hover,
+.pagination-container > div > select:hover {
+    background-color: #dfdfdf;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }

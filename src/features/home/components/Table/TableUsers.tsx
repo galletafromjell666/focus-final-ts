@@ -1,6 +1,5 @@
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, FilterFn, flexRender } from '@tanstack/react-table';
-import { commonCols as defaultCols, actionCol, employeeCol } from '../../../../util/tableConfig';
-import { rankItem } from '@tanstack/match-sorter-utils';
+import { commonCols as defaultCols, actionCol, employeeCol, globalSearch } from '../../../../util/tableConfig';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
 import { useEffect, useMemo, useState } from 'react';
 import { ApplicationFirestore } from '../../../../interfaces';
@@ -13,14 +12,6 @@ interface TableUserProps {
     data: ApplicationFirestore[];
     searchString: string;
 }
-
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-    const itemRank = rankItem(row.getValue(columnId), value);
-    addMeta({
-        itemRank
-    });
-    return itemRank.passed;
-};
 
 const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, searchString }) => {
     const { mutate: deleteApp } = useDeleteApplicationByID();
@@ -42,6 +33,7 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, sea
         const commonCols = defaultCols;
         return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
     }, [deleteApp, showExtraCol]);
+    //make the filter date here :)
 
     const table = useReactTable({
         data,
@@ -50,9 +42,8 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, sea
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        globalFilterFn: fuzzyFilter,
-        //
-        debugTable: true,
+        globalFilterFn: globalSearch,
+        //debugTable: true,
         state: {
             globalFilter
         }

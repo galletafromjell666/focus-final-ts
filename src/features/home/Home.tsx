@@ -1,19 +1,15 @@
-import { ToastContainer } from 'react-toastify';
-import { useFetchApplications } from '../../hooks/useFetchCollection';
-import { FilterForm, Header, TableUsers } from './components/index';
-import 'react-toastify/dist/ReactToastify.css';
-import useUserStore from '../../hooks/useUserStore';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { ToastContainer } from 'react-toastify';
+import { useFetchApplications } from '../../hooks/useFetchCollection';
+import useUserStore from '../../hooks/useUserStore';
+import { FilterForm, Header, Loader, TableUsers } from './components/index';
+import { ApplicationFirestore } from '../../interfaces';
+import 'react-toastify/dist/ReactToastify.css';
 const Home: React.FC = () => {
-    //const { data, isLoading } = useFetchApplications();//show a loader later
-    const { data } = useFetchApplications();
     const navigate = useNavigate();
-    useEffect(() => {
-        setFilteredData(data ?? []);
-    }, [data]);
-    const [filteredData, setFilteredData] = useState(data ?? []);
+    const { data = [], isLoading } = useFetchApplications();
+    const [usersTableData, setUsersTableData] = useState<ApplicationFirestore[]>([]);
     const [searchString, setSearchString] = useState('');
     const { user, removeUser } = useUserStore();
     const logOutHandler = () => {
@@ -21,12 +17,23 @@ const Home: React.FC = () => {
         navigate('/login');
     };
     const isHrEspecialist = user?.role === 'hr_specialist';
+    useEffect(() => {
+        setUsersTableData(isHrEspecialist ? data : data.filter((app) => app.employeeId === user?.employeeId));
+    }, [data, isHrEspecialist, user?.employeeId]);
+
+    let content = null;
+    if (isLoading) {
+        content = <Loader />;
+    } else if (usersTableData?.length > 0) {
+        content = <TableUsers isHrEsp={isHrEspecialist} searchString={searchString} data={usersTableData} />;
+    } else {
+        content = <h1 className="text-center fw-bold text-muted py-4">No data yet</h1>;
+    }
     return (
         <div>
             <Header user={user} logOutHandler={logOutHandler} />
             <FilterForm handleSearchChange={setSearchString} />
-            {/**FIX THIS, AND SHOW A MESSAGE WHEN EMPTY */}
-            {filteredData?.length && <TableUsers isHrEsp={isHrEspecialist} searchString={searchString} data={filteredData} />}
+            {content}
             <ToastContainer />
         </div>
     );
