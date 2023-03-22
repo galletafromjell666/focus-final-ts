@@ -34,7 +34,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                             <MDBCardBody className="p-5 w-100 d-flex flex-column">
                                 <img className="img p-5" src="./ITO_LOGO.png" alt="focus logo" />
                                 <h5 className="fw-bold text-center mb-5">Login</h5>
-                                <MDBInput wrapperClass="mb-4 w-60" label="Email address" size="lg" type="text" {...register('username', { required: 'Please enter a username' })} />
+                                <MDBInput wrapperClass="mb-4 w-60" label="username" size="lg" type="text" {...register('username', { required: 'Please enter a username' })} />
                                 {errors.username && <p>{errors.username.message}</p>}
 
                                 <MDBInput wrapperClass="mb-1 w-60" label="Password" type="password" size="lg" {...register('password', { required: 'Please enter a password' })} />

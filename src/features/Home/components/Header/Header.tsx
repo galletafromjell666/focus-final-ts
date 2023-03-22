@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
-import FormModal from '../../../formModal/FormModal';
+import FormModal from '../../../FormModal/FormModal';
 import './Header.css';
 import { User } from '../../../../interfaces';
 import { useNavigate } from 'react-router-dom';

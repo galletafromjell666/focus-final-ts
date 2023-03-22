@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './util/ProtectedRoute';
-import Login from './features/login/Login';
-import Home from './features/home/Home';
+import Login from './features/Login/Login';
+import Home from './features/Home/Home';
 
 function App() {
     return (

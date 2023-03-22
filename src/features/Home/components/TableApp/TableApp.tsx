@@ -40,7 +40,6 @@ const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol }) => {
         const commonCols = defaultCols;
         return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
     }, [deleteApp, showExtraCol]);
-    //make the filter date here :)
     const filteredData = useDateRangeFilter(data, rangeFilter);
     const table = useReactTable({
         data: filteredData,
