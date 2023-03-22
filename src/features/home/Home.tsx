@@ -25,7 +25,6 @@ const Home: React.FC = () => {
     if (isLoading) {
         content = <Loader />;
     } else if (usersTableData?.length > 0) {
-        console.log(usersTableData);
         content = <TableApp isHrEsp={isHrEspecialist} data={usersTableData} />;
     } else {
         content = <h1 className="text-center fw-bold text-muted py-4">No data yet</h1>;

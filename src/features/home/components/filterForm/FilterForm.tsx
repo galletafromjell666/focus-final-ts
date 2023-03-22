@@ -1,53 +1,49 @@
 import { Controller, useForm } from 'react-hook-form';
 import { filterFormValidations } from '../../../../util/rhfValidations';
-import { MDBBtn, MDBRow, MDBCol, MDBContainer, MDBInput } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBContainer, MDBInput } from 'mdb-react-ui-kit';
 import './FilterForm.css';
-import useFiltersStore, { FilterDate } from '../../../../hooks/useFiltersStore';
+import useFiltersStore, { RangeFilter } from '../../../../hooks/useFilterStore';
 
 const FilterForm: React.FC = () => {
-    const { setGlobalFilter, setLocalDateFilter, removeLocalDateFilter } = useFiltersStore();
-
-    const { control, handleSubmit } = useForm<FilterDate>();
-
-    const onSubmit = (formData: FilterDate) => {
-        console.log('submit');
-        setLocalDateFilter(formData);
+    const { setGlobalFilter, setRangeFilter, removeLocalDateFilter, globalFilter, rangeFilter } = useFiltersStore();
+    const { control, handleSubmit, setValue } = useForm<RangeFilter>();
+    const onSubmit = (formData: RangeFilter) => {
+        setRangeFilter(formData);
     };
-
     const handleFilterRemoval = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         removeLocalDateFilter();
+        setGlobalFilter('');
+        setValue('startInterval', '');
+        setValue('endInterval', '');
     };
-
     return (
-        <MDBContainer fluid>
-            <MDBRow center className="my-4 mx-2">
-                <MDBCol lg="6" md="8" sm="10" xs="12" className="py-2">
-                    <div className="input-container">
-                        <MDBInput
-                            size="lg"
-                            onChange={(e) => {
-                                setGlobalFilter(String(e.target.value));
-                            }}
-                            type="text"
-                            wrapperClass="form-outline"
-                            label="Search"
-                        />
-                    </div>
-                </MDBCol>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <MDBCol lg="2" md="4" sm="5" xs="12" className="py-2">
-                        <label className="label-date" htmlFor="date-from">
-                            From
-                        </label>
+        <MDBContainer fluid className="filter-container">
+            <div className="w-100 d-flex align-items-end">
+                <MDBInput
+                    value={globalFilter}
+                    size="lg"
+                    onChange={(e) => {
+                        setGlobalFilter(String(e.target.value));
+                    }}
+                    type="text"
+                    wrapperClass="w-100"
+                    label="Search"
+                />
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="date-filter">
+                    <div className="date-input-container">
+                        <label htmlFor="date-from">From</label>
                         <Controller
                             name="startInterval"
                             control={control}
                             rules={filterFormValidations.startInterval}
                             render={({ field }) => (
-                                <input
+                                <MDBInput
                                     id="startInterval"
                                     type="date"
+                                    size="lg"
                                     {...field}
                                     value={field.value ?? ''}
                                     onChange={(e) => {
@@ -56,19 +52,18 @@ const FilterForm: React.FC = () => {
                                 />
                             )}
                         />
-                    </MDBCol>
-                    <MDBCol lg="2" md="4" sm="5" xs="12" className="py-2">
-                        <label className="label-date" htmlFor="date-to">
-                            To
-                        </label>
+                    </div>
+                    <div className="date-input-container">
+                        <label htmlFor="date-to">To</label>
                         <Controller
                             name="endInterval"
                             control={control}
                             rules={filterFormValidations.endInterval}
                             render={({ field }) => (
-                                <input
+                                <MDBInput
                                     id="endInterval"
                                     type="date"
+                                    size="lg"
                                     {...field}
                                     value={field.value ?? ''}
                                     onChange={(e) => {
@@ -77,19 +72,21 @@ const FilterForm: React.FC = () => {
                                 />
                             )}
                         />
-                    </MDBCol>
-                    <MDBCol lg="2" md="4" sm="2" xs="12" className="py-2">
-                        <div className="input-container">
-                            <MDBBtn className="button-filter" type="submit" color="secondary">
+                    </div>
+                    <div>
+                        <div className="filter-button-container">
+                            {rangeFilter && (
+                                <MDBBtn onClick={handleFilterRemoval} color="warning">
+                                    Remove filter
+                                </MDBBtn>
+                            )}
+                            <MDBBtn size="lg" type="submit" color="secondary">
                                 Filter
                             </MDBBtn>
-                            <MDBBtn onClick={handleFilterRemoval} className="button-filter" color="secondary">
-                                Remove filter
-                            </MDBBtn>
                         </div>
-                    </MDBCol>
-                </form>
-            </MDBRow>
+                    </div>
+                </div>
+            </form>
         </MDBContainer>
     );
 };

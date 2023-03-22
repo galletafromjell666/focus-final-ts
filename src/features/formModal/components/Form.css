@@ -8,8 +8,8 @@
 
 .especialist {
     grid-template-areas:
-        'employee end-date'
-        'medical-unit start-date'
+        'employee start-date'
+        'medical-unit end-date'
         'doctor coverage-days';
 }
 

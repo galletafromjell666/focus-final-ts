@@ -8,7 +8,7 @@ import { newApplicationValidations, defaultValues } from '../../../util/rhfValid
 import { getDeltaFromDates } from '../../../util/dateUtilities';
 import { FormApp } from '../../../interfaces';
 import useHandleModalSubmit from '../../../hooks/useFormSubmission';
-import './AppForm.css';
+import './Form.css';
 interface AppFormProps {
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +32,6 @@ const AppForm: React.FC<AppFormProps> = ({ setShow }) => {
     const { handleModalSubmit } = useHandleModalSubmit();
 
     const onSubmit = (formData: FormApp) => {
-        console.log(formData);
         handleModalSubmit({ formData, isHrEspecialist, employeeData, user });
     };
     useEffect(() => {

@@ -11,7 +11,6 @@ const Login: React.FC = () => {
         if (status === 'success') {
             navigate('/');
         } else {
-            console.log('here');
             toast.error('Wrong login info', toastStyles.loginErr);
         }
     };

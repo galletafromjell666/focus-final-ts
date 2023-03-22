@@ -1,7 +1,7 @@
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, flexRender } from '@tanstack/react-table';
-import { commonCols as defaultCols, actionCol, employeeCol, globalSearch, dateRangeFilter } from '../../../../util/tableConfig';
+import { commonCols as defaultCols, actionCol, employeeCol, globalSearchFn, dateRangeFilter } from '../../../../util/tableConfig';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
-import useFiltersStore, { FilterDate } from '../../../../hooks/useFiltersStore';
+import useFiltersStore, { RangeFilter } from '../../../../hooks/useFilterStore';
 import { useMemo } from 'react';
 import { ApplicationFirestore } from '../../../../interfaces';
 import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
@@ -14,8 +14,7 @@ interface TableAppProps {
     data: ApplicationFirestore[];
 }
 
-const useDateRangeFilter = (data: any[], dateFilter?: FilterDate) => {
-    console.log(dateFilter);
+const useDateRangeFilter = (data: any[], dateFilter?: RangeFilter) => {
     return useMemo(() => {
         if (dateFilter) {
             return dateRangeFilter(data, dateFilter.startInterval, dateFilter.endInterval);
@@ -25,7 +24,7 @@ const useDateRangeFilter = (data: any[], dateFilter?: FilterDate) => {
 };
 
 const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol }) => {
-    const { globalFilter, localDateFilter } = useFiltersStore();
+    const { globalFilter, rangeFilter } = useFiltersStore();
     const { mutate: deleteApp } = useDeleteApplicationByID();
 
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
@@ -42,14 +41,14 @@ const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol }) => {
         return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
     }, [deleteApp, showExtraCol]);
     //make the filter date here :)
-    const filteredData = useDateRangeFilter(data, localDateFilter);
+    const filteredData = useDateRangeFilter(data, rangeFilter);
     const table = useReactTable({
         data: filteredData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        globalFilterFn: globalSearch,
+        globalFilterFn: globalSearchFn,
         //debugTable: true,
         state: {
             globalFilter

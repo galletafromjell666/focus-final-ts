@@ -1,25 +1,25 @@
 import { create, StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-export interface FilterDate {
+export interface RangeFilter {
     startInterval: string;
     endInterval: string;
 }
 
 interface State {
     globalFilter: string;
-    localDateFilter?: FilterDate;
+    rangeFilter?: RangeFilter;
     setGlobalFilter: (filter: string) => void;
-    setLocalDateFilter: (filter: FilterDate | undefined) => void;
+    setRangeFilter: (filter: RangeFilter | undefined) => void;
     removeLocalDateFilter: () => void;
 }
 
 const filterState: StateCreator<State> = (set) => ({
     globalFilter: '',
-    localDateFilter: undefined,
+    rangeFilter: undefined,
     setGlobalFilter: (filter) => set({ globalFilter: filter }),
-    setLocalDateFilter: (filter) => set({ localDateFilter: filter }),
-    removeLocalDateFilter: () => set({ localDateFilter: undefined })
+    setRangeFilter: (filter) => set({ rangeFilter: filter }),
+    removeLocalDateFilter: () => set({ rangeFilter: undefined })
 });
 
 const useFiltersStore = create<State>()(devtools(filterState));

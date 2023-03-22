@@ -71,9 +71,6 @@ const actionCol = (callback: (arg0: ApplicationFirestore) => void) => {
 };
 
 function dateRangeFilter(arr: ApplicationFirestore[], startDateStr: string, endDateStr: string) {
-    console.log(`dates filter 
-    start ${startDateStr}
-    end ${endDateStr}`);
     const startDate = parseISO(startDateStr);
     const endDate = parseISO(endDateStr);
     return arr.filter((u) => {
@@ -88,7 +85,7 @@ function dateRangeFilter(arr: ApplicationFirestore[], startDateStr: string, endD
     });
 }
 
-function globalSearch(row: any, columnId: string, value: any, addMeta: (arg0: { itemRank: RankingInfo }) => void): any {
+function globalSearchFn(row: any, columnId: string, value: any, addMeta: (arg0: { itemRank: RankingInfo }) => void): any {
     const itemRank = rankItem(row.getValue(columnId), value);
     addMeta({
         itemRank
@@ -96,4 +93,4 @@ function globalSearch(row: any, columnId: string, value: any, addMeta: (arg0: { 
     return itemRank.passed;
 }
 
-export { commonCols, employeeCol, actionCol, globalSearch, dateRangeFilter };
+export { commonCols, employeeCol, actionCol, globalSearchFn, dateRangeFilter };
