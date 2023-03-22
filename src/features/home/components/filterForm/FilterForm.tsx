@@ -23,16 +23,16 @@ const FilterForm: React.FC<FilterFormProps> = ({ handleSearchChange }) => {
                     </div>
                 </MDBCol>
                 <MDBCol lg="2" md="4" sm="5" xs="12" className="py-2">
-                    <label className="label-date" htmlFor="date-for">
+                    <label className="label-date" htmlFor="date-from">
                         From
                     </label>
-                    <MDBInput size="lg" id="date-for" type="text" className="search-date" />
+                    <input id="date-from" name="date-from" type="date" className="search-date" />
                 </MDBCol>
                 <MDBCol lg="2" md="4" sm="5" xs="12" className="py-2">
-                    <label className="label-date" htmlFor="date-from">
+                    <label className="label-date" htmlFor="date-to">
                         To
                     </label>
-                    <MDBInput size="lg" id="date-from" type="text" className="search-date" />
+                    <input id="date-to" name="date-to" type="date" className="search-date" />
                 </MDBCol>
                 <MDBCol lg="2" md="4" sm="2" xs="12" className="py-2">
                     <div className="input-container">

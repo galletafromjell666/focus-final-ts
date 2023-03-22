@@ -12,6 +12,7 @@ const Home: React.FC = () => {
     const { data = [], isLoading } = useFetchApplications();
     const [usersTableData, setUsersTableData] = useState<ApplicationFirestore[]>([]);
     const [searchString, setSearchString] = useState('');
+    //just pass removeUser to header, and move the navigate there too.
     const { user, removeUser } = useUserStore();
     const logOutHandler = () => {
         removeUser();

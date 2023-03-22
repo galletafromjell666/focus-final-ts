@@ -1,4 +1,5 @@
 import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
+import { isWithinInterval, parseISO } from 'date-fns';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { ApplicationFirestore } from '../interfaces';
 
@@ -69,6 +70,24 @@ const actionCol = (callback: (arg0: ApplicationFirestore) => void) => {
     };
 };
 
+function dateRangeFilter(arr: ApplicationFirestore[], startDateStr: string, endDateStr: string) {
+    console.log(`dates filter 
+    start ${startDateStr}
+    end ${endDateStr}`);
+    const startDate = parseISO(startDateStr);
+    const endDate = parseISO(endDateStr);
+    return arr.filter((u) => {
+        const sickLeaveStartDate = parseISO(u.sickLeaveStartDate);
+        const sickLeaveEndDate = parseISO(u.sickLeaveEndDate);
+        return (
+            isWithinInterval(sickLeaveStartDate, {
+                start: startDate,
+                end: endDate
+            }) || isWithinInterval(sickLeaveEndDate, { start: startDate, end: endDate })
+        );
+    });
+}
+
 function globalSearch(row: any, columnId: string, value: any, addMeta: (arg0: { itemRank: RankingInfo }) => void): any {
     const itemRank = rankItem(row.getValue(columnId), value);
     addMeta({
@@ -77,4 +96,4 @@ function globalSearch(row: any, columnId: string, value: any, addMeta: (arg0: { 
     return itemRank.passed;
 }
 
-export { commonCols, employeeCol, actionCol, globalSearch };
+export { commonCols, employeeCol, actionCol, globalSearch, dateRangeFilter };

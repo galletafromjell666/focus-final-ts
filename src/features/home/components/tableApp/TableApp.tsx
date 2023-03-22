@@ -1,5 +1,5 @@
-import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, FilterFn, flexRender } from '@tanstack/react-table';
-import { commonCols as defaultCols, actionCol, employeeCol, globalSearch } from '../../../../util/tableConfig';
+import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, flexRender } from '@tanstack/react-table';
+import { commonCols as defaultCols, actionCol, employeeCol, globalSearch, dateRangeFilter } from '../../../../util/tableConfig';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
 import { useEffect, useMemo, useState } from 'react';
 import { ApplicationFirestore } from '../../../../interfaces';
@@ -35,6 +35,10 @@ const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, search
         return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
     }, [deleteApp, showExtraCol]);
     //make the filter date here :)
+
+    data = useMemo(() => {
+        return dateRangeFilter(data, '2023-03-10', '2023-03-15');
+    }, [data]);
 
     const table = useReactTable({
         data,
