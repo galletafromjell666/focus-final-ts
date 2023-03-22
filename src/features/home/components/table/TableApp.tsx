@@ -6,14 +6,15 @@ import { ApplicationFirestore } from '../../../../interfaces';
 import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import toastStyles from '../../../../util/toastifyStyles';
-import './Table.css';
-interface TableUserProps {
+import './TableApp.css';
+
+interface TableAppProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
     searchString: string;
 }
 
-const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, searchString }) => {
+const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, searchString }) => {
     const { mutate: deleteApp } = useDeleteApplicationByID();
     const [globalFilter, setGlobalFilter] = useState('');
     useEffect(() => {
@@ -112,4 +113,4 @@ const TableUsers: React.FC<TableUserProps> = ({ data, isHrEsp: showExtraCol, sea
     );
 };
 
-export default TableUsers;
+export default TableApp;

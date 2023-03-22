@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useFetchApplications } from '../../hooks/useFetchCollection';
 import useUserStore from '../../hooks/useUserStore';
-import { FilterForm, Header, Loader, TableUsers } from './components/index';
+import { FilterForm, Header, Loader, TableApp } from './components/index';
 import { ApplicationFirestore } from '../../interfaces';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,7 +31,8 @@ const Home: React.FC = () => {
     if (isLoading) {
         content = <Loader />;
     } else if (usersTableData?.length > 0) {
-        content = <TableUsers isHrEsp={isHrEspecialist} searchString={searchString} data={usersTableData} />;
+        console.log(usersTableData);
+        content = <TableApp isHrEsp={isHrEspecialist} searchString={searchString} data={usersTableData} />;
     } else {
         content = <h1 className="text-center fw-bold text-muted py-4">No data yet</h1>;
     }
