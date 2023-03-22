@@ -2,24 +2,23 @@ import { Controller, useForm } from 'react-hook-form';
 import { filterFormValidations } from '../../../../util/rhfValidations';
 import { MDBBtn, MDBRow, MDBCol, MDBContainer, MDBInput } from 'mdb-react-ui-kit';
 import './FilterForm.css';
+import useFiltersStore, { FilterDate } from '../../../../hooks/useFiltersStore';
 
-interface FilterFormProps {
-    handleSearchChange: React.Dispatch<React.SetStateAction<string>>;
-    handleDateChange: React.Dispatch<React.SetStateAction<DateFilterForm | undefined>>;
-}
+const FilterForm: React.FC = () => {
+    const { setGlobalFilter, setLocalDateFilter, removeLocalDateFilter } = useFiltersStore();
 
-export interface DateFilterForm {
-    startInterval: string;
-    endInterval: string;
-}
+    const { control, handleSubmit } = useForm<FilterDate>();
 
-const FilterForm: React.FC<FilterFormProps> = ({ handleSearchChange, handleDateChange }) => {
-    const { control, handleSubmit } = useForm<DateFilterForm>();
-
-    const onSubmit = (formData: DateFilterForm) => {
-        console.log(formData);
-        handleDateChange(formData);
+    const onSubmit = (formData: FilterDate) => {
+        console.log('submit');
+        setLocalDateFilter(formData);
     };
+
+    const handleFilterRemoval = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        removeLocalDateFilter();
+    };
+
     return (
         <MDBContainer fluid>
             <MDBRow center className="my-4 mx-2">
@@ -28,7 +27,7 @@ const FilterForm: React.FC<FilterFormProps> = ({ handleSearchChange, handleDateC
                         <MDBInput
                             size="lg"
                             onChange={(e) => {
-                                handleSearchChange(String(e.target.value));
+                                setGlobalFilter(String(e.target.value));
                             }}
                             type="text"
                             wrapperClass="form-outline"
@@ -83,6 +82,9 @@ const FilterForm: React.FC<FilterFormProps> = ({ handleSearchChange, handleDateC
                         <div className="input-container">
                             <MDBBtn className="button-filter" type="submit" color="secondary">
                                 Filter
+                            </MDBBtn>
+                            <MDBBtn onClick={handleFilterRemoval} className="button-filter" color="secondary">
+                                Remove filter
                             </MDBBtn>
                         </div>
                     </MDBCol>

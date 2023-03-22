@@ -1,42 +1,32 @@
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, flexRender } from '@tanstack/react-table';
 import { commonCols as defaultCols, actionCol, employeeCol, globalSearch, dateRangeFilter } from '../../../../util/tableConfig';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
-import { useEffect, useMemo, useState } from 'react';
+import useFiltersStore, { FilterDate } from '../../../../hooks/useFiltersStore';
+import { useMemo } from 'react';
 import { ApplicationFirestore } from '../../../../interfaces';
 import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import toastStyles from '../../../../util/toastifyStyles';
 import './TableApp.css';
-import { DateFilterForm } from '../filterForm/FilterForm';
 
 interface TableAppProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
-    searchString: string;
-    dateFilter: DateFilterForm | undefined;
 }
 
-const useDateRangeFilter = (data: any[], dateFilter?: DateFilterForm) => {
+const useDateRangeFilter = (data: any[], dateFilter?: FilterDate) => {
+    console.log(dateFilter);
     return useMemo(() => {
-      if (dateFilter) {
-        return dateRangeFilter(data, dateFilter.startInterval, dateFilter.endInterval);
-      }
-      return data;
+        if (dateFilter) {
+            return dateRangeFilter(data, dateFilter.startInterval, dateFilter.endInterval);
+        }
+        return data;
     }, [data, dateFilter]);
-  }
-  
+};
 
-const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, searchString, dateFilter }) => {
+const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol }) => {
+    const { globalFilter, localDateFilter } = useFiltersStore();
     const { mutate: deleteApp } = useDeleteApplicationByID();
-    const [globalFilter, setGlobalFilter] = useState('');
-    const [localDateFilter, setLocalDateFilter] = useState<DateFilterForm>();
-    useEffect(() => {
-        setGlobalFilter(searchString);
-    }, [searchString]);
-
-    useEffect(() => {
-        return setLocalDateFilter(dateFilter);
-    }, [dateFilter]);
 
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
         function handleDeleteApp(rowData: ApplicationFirestore) {
@@ -54,9 +44,8 @@ const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, search
     //make the filter date here :)
     const filteredData = useDateRangeFilter(data, localDateFilter);
     const table = useReactTable({
-        data : filteredData,
+        data: filteredData,
         columns,
-        onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),

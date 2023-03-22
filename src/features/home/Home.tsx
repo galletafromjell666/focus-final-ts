@@ -5,13 +5,11 @@ import useUserStore from '../../hooks/useUserStore';
 import { FilterForm, Header, Loader, TableApp } from './components/index';
 import { ApplicationFirestore } from '../../interfaces';
 import 'react-toastify/dist/ReactToastify.css';
-import { DateFilterForm } from './components/filterForm/FilterForm';
 
 const Home: React.FC = () => {
     const { data = [], isLoading } = useFetchApplications();
     const [usersTableData, setUsersTableData] = useState<ApplicationFirestore[]>([]);
-    const [searchString, setSearchString] = useState('');
-    const [dateObj, setDateObj] = useState<DateFilterForm | undefined>();
+
     const { user, removeUser } = useUserStore();
     const isHrEspecialist = user?.role === 'hr_specialist';
 
@@ -28,14 +26,14 @@ const Home: React.FC = () => {
         content = <Loader />;
     } else if (usersTableData?.length > 0) {
         console.log(usersTableData);
-        content = <TableApp dateFilter={dateObj} isHrEsp={isHrEspecialist} searchString={searchString} data={usersTableData} />;
+        content = <TableApp isHrEsp={isHrEspecialist} data={usersTableData} />;
     } else {
         content = <h1 className="text-center fw-bold text-muted py-4">No data yet</h1>;
     }
     return (
         <div>
             <Header user={user} logOutUser={removeUser} />
-            <FilterForm handleDateChange={setDateObj} handleSearchChange={setSearchString} />
+            <FilterForm />
             {content}
             <ToastContainer />
         </div>
