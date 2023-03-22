@@ -7,19 +7,36 @@ import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import toastStyles from '../../../../util/toastifyStyles';
 import './TableApp.css';
+import { DateFilterForm } from '../filterForm/FilterForm';
 
 interface TableAppProps {
     isHrEsp: boolean;
     data: ApplicationFirestore[];
     searchString: string;
+    dateFilter: DateFilterForm | undefined;
 }
 
-const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, searchString }) => {
+const useDateRangeFilter = (data: any[], dateFilter?: DateFilterForm) => {
+    return useMemo(() => {
+      if (dateFilter) {
+        return dateRangeFilter(data, dateFilter.startInterval, dateFilter.endInterval);
+      }
+      return data;
+    }, [data, dateFilter]);
+  }
+  
+
+const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, searchString, dateFilter }) => {
     const { mutate: deleteApp } = useDeleteApplicationByID();
     const [globalFilter, setGlobalFilter] = useState('');
+    const [localDateFilter, setLocalDateFilter] = useState<DateFilterForm>();
     useEffect(() => {
         setGlobalFilter(searchString);
     }, [searchString]);
+
+    useEffect(() => {
+        return setLocalDateFilter(dateFilter);
+    }, [dateFilter]);
 
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
         function handleDeleteApp(rowData: ApplicationFirestore) {
@@ -35,13 +52,9 @@ const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol, search
         return showExtraCol ? [employeeCol, ...commonCols, deleteCol] : [...commonCols, deleteCol];
     }, [deleteApp, showExtraCol]);
     //make the filter date here :)
-
-    data = useMemo(() => {
-        return dateRangeFilter(data, '2023-03-10', '2023-03-15');
-    }, [data]);
-
+    const filteredData = useDateRangeFilter(data, localDateFilter);
     const table = useReactTable({
-        data,
+        data : filteredData,
         columns,
         onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),

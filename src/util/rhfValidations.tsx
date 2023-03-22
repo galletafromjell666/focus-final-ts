@@ -75,4 +75,23 @@ const newApplicationValidations = {
     }
 };
 
-export { newApplicationValidations, defaultValues };
+const filterFormValidations = {
+    startInterval: {
+        validate: {
+            startDateLessThanEndDate: (startDate: Date | string, values: FieldValues) => {
+                const endDate = values['endInterval'];
+                return startDateLessThanEndDate(new Date(startDate), new Date(endDate));
+            }
+        }
+    },
+    endInterval: {
+        validate: {
+            endDateGreaterThanStartDate: (endDate: Date | string, values: FieldValues) => {
+                const startDate = values['startInterval'];
+                return endDateGreaterThanStartDate(new Date(endDate), new Date(startDate));
+            }
+        }
+    }
+};
+
+export { newApplicationValidations, defaultValues, filterFormValidations };

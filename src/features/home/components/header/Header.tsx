@@ -3,16 +3,23 @@ import { MDBRow, MDBContainer, MDBCol, MDBIcon, MDBTypography, MDBBtn } from 'md
 import FormModal from '../../../formModal/FormModal';
 import './Header.css';
 import { User } from '../../../../interfaces';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
-    logOutHandler: () => void;
+    logOutUser: () => void;
     user: User | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ user, logOutHandler }) => {
+const Header: React.FC<HeaderProps> = ({ user, logOutUser }) => {
+    const navigate = useNavigate();
     const [basicModal, setBasicModal] = useState(false);
     const btnModalHandler = (setModalFn: React.Dispatch<React.SetStateAction<boolean>>) => {
         setModalFn(true);
+    };
+
+    const logOutHandler = () => {
+        logOutUser();
+        navigate('/login');
     };
     return (
         <>
