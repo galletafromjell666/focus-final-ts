@@ -17,25 +17,27 @@ roles.
 
 ## Getting started
 
-To get started with the Focus Final TS project, please follow the steps below:
+To get started with the Focus Final TS project, please follow the steps below: Download or clone the repository onto your local machine.
 
-Download or clone the repository onto your local machine.
+-   Navigate to the project directory in your terminal:
 
-Navigate to the project directory in your terminal:
+    `cd focus-final-ts`
 
-`cd focus-final-ts`
+-   Install the project dependencies:
 
-Install the project dependencies:
+    `npm install`
 
-`npm install`
+-   Create the .env file and fill it with your Firebase configuration details. You can use the .env.example file as a guide:
 
-To start the project server, run the following command:
+    `touch .env`
 
-`npm run dev`
+-   To start the project server, run the following command:
 
-Once the server is running, you can visit the app in your web browser by navigating to:
+    `npm run dev`
 
-`localhost:5173`
+-   Once the server is running, you can visit the app in your web browser by navigating to:
+
+    `localhost:5173`
 
 ## Authors
 
