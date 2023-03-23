@@ -1,7 +1,7 @@
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, ColumnDef, flexRender } from '@tanstack/react-table';
 import { commonCols as defaultCols, actionCol, employeeCol, globalSearchFn, dateRangeFilter } from '../../../../util/tableConfig';
 import { useDeleteApplicationByID } from '../../../../hooks/useDeleteApplication';
-import useFiltersStore, { RangeFilter } from '../../../../hooks/useFilterStore';
+import useFilterStore, { RangeFilter } from '../../../../hooks/useFilterStore';
 import { useMemo } from 'react';
 import { ApplicationFirestore } from '../../../../interfaces';
 import { MDBContainer, MDBTable } from 'mdb-react-ui-kit';
@@ -24,9 +24,8 @@ const useDateRangeFilter = (data: any[], dateFilter?: RangeFilter) => {
 };
 
 const TableApp: React.FC<TableAppProps> = ({ data, isHrEsp: showExtraCol }) => {
-    const { globalFilter, rangeFilter } = useFiltersStore();
+    const { globalFilter, rangeFilter } = useFilterStore();
     const { mutate: deleteApp } = useDeleteApplicationByID();
-
     const columns = useMemo<ColumnDef<ApplicationFirestore>[]>(() => {
         function handleDeleteApp(rowData: ApplicationFirestore) {
             deleteApp(rowData.id, {

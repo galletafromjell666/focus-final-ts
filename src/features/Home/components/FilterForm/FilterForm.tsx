@@ -2,10 +2,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { filterFormValidations } from '../../../../util/rhfValidations';
 import { MDBBtn, MDBContainer, MDBInput } from 'mdb-react-ui-kit';
 import './FilterForm.css';
-import useFiltersStore, { RangeFilter } from '../../../../hooks/useFilterStore';
+import useFilterStore, { RangeFilter } from '../../../../hooks/useFilterStore';
 
 const FilterForm: React.FC = () => {
-    const { setGlobalFilter, setRangeFilter, removeLocalDateFilter, globalFilter, rangeFilter } = useFiltersStore();
+    const { setGlobalFilter, setRangeFilter, removeLocalDateFilter, globalFilter, rangeFilter } = useFilterStore();
     const { control, handleSubmit, setValue } = useForm<RangeFilter>();
     const onSubmit = (formData: RangeFilter) => {
         setRangeFilter(formData);

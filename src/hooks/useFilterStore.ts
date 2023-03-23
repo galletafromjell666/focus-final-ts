@@ -6,15 +6,15 @@ export interface RangeFilter {
     endInterval: string;
 }
 
-interface State {
+interface FilterStore {
     globalFilter: string;
     rangeFilter?: RangeFilter;
     setGlobalFilter: (filter: string) => void;
-    setRangeFilter: (filter: RangeFilter | undefined) => void;
+    setRangeFilter: (filter: RangeFilter | undefined) => void; 
     removeLocalDateFilter: () => void;
 }
 
-const filterState: StateCreator<State> = (set) => ({
+const filterState: StateCreator<FilterStore> = (set) => ({
     globalFilter: '',
     rangeFilter: undefined,
     setGlobalFilter: (filter) => set({ globalFilter: filter }),
@@ -22,6 +22,6 @@ const filterState: StateCreator<State> = (set) => ({
     removeLocalDateFilter: () => set({ rangeFilter: undefined })
 });
 
-const useFiltersStore = create<State>()(devtools(filterState));
+const useFilterStore = create<FilterStore>()(devtools(filterState));
 
-export default useFiltersStore;
+export default useFilterStore;

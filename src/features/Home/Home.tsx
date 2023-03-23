@@ -9,18 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const Home: React.FC = () => {
     const { data = [], isLoading } = useFetchApplications();
     const [tableAppData, setTableAppData] = useState<ApplicationFirestore[]>([]);
-
     const { user, removeUser } = useUserStore();
     const isHrEspecialist = user?.role === 'hr_specialist';
-
     const updateUsersTableData = useCallback((data: ApplicationFirestore[], employeeId: string | undefined, isHrEspecialist: boolean, setTableAppData: (data: ApplicationFirestore[]) => void) => {
         setTableAppData(isHrEspecialist ? data : data.filter((app) => app.employeeId === employeeId));
     }, []);
-
     useEffect(() => {
         updateUsersTableData(data, user?.employeeId, isHrEspecialist, setTableAppData);
     }, [data, isHrEspecialist, user?.employeeId, updateUsersTableData]);
-
     let content = null;
     if (isLoading) {
         content = <Loader />;

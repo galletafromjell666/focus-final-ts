@@ -17,7 +17,9 @@ roles.
 
 ## Getting started
 
-To get started with the Focus Final TS project, please follow the steps below: Download or clone the repository onto your local machine.
+To get started with the Focus Final TS project, please follow the steps below:
+
+Download or clone the repository onto your local machine.
 
 Navigate to the project directory in your terminal:
 
