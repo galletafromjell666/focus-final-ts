@@ -7,7 +7,7 @@ import useUserStore from '../../../hooks/useUserStore';
 import { newApplicationValidations, defaultValues } from '../../../util/rhfValidations';
 import { getDeltaFromDates } from '../../../util/dateUtilities';
 import { FormApp } from '../../../interfaces';
-import useHandleModalSubmit from '../../../hooks/useFormSubmission';
+import useFormSubmit from '../../../hooks/useFormSubmit';
 import './Form.css';
 interface AppFormProps {
     show: boolean;
@@ -29,10 +29,10 @@ const AppForm: React.FC<AppFormProps> = ({ setShow }) => {
     const { data: employeeData } = useFetchEmployees();
     const { user } = useUserStore();
     const isHrEspecialist = user?.role === 'hr_specialist';
-    const { handleModalSubmit } = useHandleModalSubmit();
+    const { handleAppFormSubmit } = useFormSubmit();
 
     const onSubmit = (formData: FormApp) => {
-        handleModalSubmit({ formData, isHrEspecialist, employeeData, user });
+        handleAppFormSubmit({ formData, isHrEspecialist, employeeData, user });
     };
     useEffect(() => {
         if (formState.isSubmitSuccessful) {
@@ -54,7 +54,7 @@ const AppForm: React.FC<AppFormProps> = ({ setShow }) => {
     };
 
     return (
-        <MDBContainer fluid >
+        <MDBContainer fluid>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={`form-class-container ${isHrEspecialist ? 'especialist' : 'employee'}`}>
                     {isHrEspecialist ? (

@@ -4,16 +4,16 @@ import { useAddApplication } from './useAddApplication';
 import { Application, Employee, FormApp, User } from '../interfaces';
 import toastStyles from '../util/toastifyStyles';
 
-interface UseHandleModalSubmitParams {
+interface UsehandleAppFormSubmitParams {
     formData: FormApp;
     isHrEspecialist: boolean;
     employeeData: Employee[] | undefined;
     user: User | null;
 }
 
-function useHandleModalSubmit() {
+function useFormSubmit() {
     const { mutate: addApplication } = useAddApplication();
-    const handleModalSubmit = async ({ formData, isHrEspecialist, employeeData, user }: UseHandleModalSubmitParams) => {
+    const handleAppFormSubmit = async ({ formData, isHrEspecialist, employeeData, user }: UsehandleAppFormSubmitParams) => {
         const currentDate = format(new Date(), 'yyyy-MM-dd');
         const employeeObj = employeeData?.find((u) => u.id === (isHrEspecialist ? formData.employeeId : user?.employeeId));
         const newAppToSubmit: Application = {
@@ -30,7 +30,7 @@ function useHandleModalSubmit() {
         }
     };
 
-    return { handleModalSubmit };
+    return { handleAppFormSubmit };
 }
 
-export default useHandleModalSubmit;
+export default useFormSubmit;
